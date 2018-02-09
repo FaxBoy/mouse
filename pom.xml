@@ -22,5 +22,7 @@
 
 	<modules>
 		<module>mouse-common</module>
+		<module>mouse-model</module>
+		<module>mouse-boot</module>
 	</modules>
 </project>

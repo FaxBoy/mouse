@@ -10,20 +10,19 @@
 	</parent>
 
 	<packaging>jar</packaging>
-	<artifactId>mouse-common</artifactId>
-	<name>mouse-common</name>
+	<artifactId>mouse-model</artifactId>
+	<name>mouse-model</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.jwt.version>2.2.0</java.jwt.version>
 	</properties>
 
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>com.auth0</groupId>
-			<artifactId>java-jwt</artifactId>
-			<version>${java.jwt.version}</version>
-		</dependency>
+       <groupId>com.mouse</groupId>
+       <artifactId>mouse-common</artifactId>
+       <version>${project.version}</version>
+    </dependency>
 	</dependencies>
 </project>
