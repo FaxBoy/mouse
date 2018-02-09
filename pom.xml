@@ -26,5 +26,6 @@
 		<module>mouse-boot</module>
 		<module>mouse-web</module>
 		<module>mouse-security</module>
+		<module>mouse-restful</module>
 	</modules>
 </project>
