@@ -24,5 +24,7 @@
 		<module>mouse-common</module>
 		<module>mouse-model</module>
 		<module>mouse-boot</module>
+		<module>mouse-web</module>
+		<module>mouse-security</module>
 	</modules>
 </project>
