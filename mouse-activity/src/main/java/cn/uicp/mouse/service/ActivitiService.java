@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.activiti.engine.task.Task;
 import org.springframework.stereotype.Service;
 
-@Service
 @Transactional
 public interface ActivitiService {
 
@@ -19,5 +18,8 @@ public interface ActivitiService {
 
 	// 完成任务
 	public void completeTasks(Boolean joinApproved, String taskId);
+	
+	//请假测试
+	public boolean startActivityDemo();
 	
 }

@@ -12,7 +12,6 @@ import model.Person;
 import java.util.Arrays;
 import java.util.List;
 
-@Service
 public interface JoinService {
 
 	// 加入公司操作，可从DelegateExecution获取流程中的变量

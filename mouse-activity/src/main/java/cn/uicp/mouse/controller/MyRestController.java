@@ -10,17 +10,18 @@ import org.springframework.web.bind.annotation.*;
 import cn.uicp.mouse.service.ActivitiService;
 
 @RestController
+@RequestMapping("/myRest")
 public class MyRestController {
 	@Autowired
 	private ActivitiService myService;
-	
-	//开启流程实例
+
+	// 开启流程实例
 	@RequestMapping(value = "/process/{personId}/{compId}", method = RequestMethod.GET)
 	public void startProcessInstance(@PathVariable Long personId, @PathVariable Long compId) {
 		myService.startProcess(personId, compId);
 	}
-	
-	//获取当前人的任务
+
+	// 获取当前人的任务
 	@RequestMapping(value = "/tasks", method = RequestMethod.GET)
 	public List<TaskRepresentation> getTasks(@RequestParam String assignee) {
 		List<Task> tasks = myService.getTasks(assignee);
@@ -30,38 +31,45 @@ public class MyRestController {
 		}
 		return dtos;
 	}
-	
-	//完成任务
+
+	// 完成任务
 	@RequestMapping(value = "/complete/{joinApproved}/{taskId}", method = RequestMethod.GET)
 	public String complete(@PathVariable Boolean joinApproved, @PathVariable String taskId) {
 		myService.completeTasks(joinApproved, taskId);
 		return "ok";
 	}
-	
-	//Task的dto
+
+	// 完成任务
+	@RequestMapping(value = "/activitiTest", method = RequestMethod.GET)
+	public String activitiTest() {
+		myService.startActivityDemo();
+		return "ok";
+	}
+
+	// Task的dto
 	static class TaskRepresentation
-	
+
 	{
 		private String id;
 		private String name;
-		
+
 		public TaskRepresentation(String id, String name) {
 			this.id = id;
 			this.name = name;
 		}
-		
+
 		public String getId() {
 			return id;
 		}
-		
+
 		public void setId(String id) {
 			this.id = id;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
-		
+
 		public void setName(String name) {
 			this.name = name;
 		}
