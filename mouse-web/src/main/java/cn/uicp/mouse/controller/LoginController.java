@@ -44,21 +44,21 @@ public class LoginController {
 	@RequestMapping(value = "",method=RequestMethod.POST)  
 	public ModelAndView login(HttpServletRequest request,
 			HttpServletResponse response){
-		String username = request.getParameter("username");
+		String username = request.getParameter("Email");
 		//testPage();//分页
 		//test();//测试
 		//test2();//测试事务
 		try {
-			Test test=testService.getUserName(username);
+			Test test=testService.getUserName("admin");
 			ModelAndView mav= new ModelAndView();
-			mav.addObject("userName",test.getUname());
-			mav.addObject("passWord",test.getAge());
+			mav.addObject("userName",test.getSt_name());
+			mav.addObject("passWord",test.getSt_pass());
 			//登录验证并返回登录成功用户对象  
 	        //User user=loginResult(userPhone, passWord, code, request);  
 	        //把用户对象放入到session中，将会触发LoginListenner中的attributeAdded事件  
 	        request.getSession().setAttribute("loginuser", test);
 			mav.setViewName("project/home");
-			logger.debug("登录成功："+test.getUname());
+			logger.debug("登录成功："+test.getSt_name());
 			return mav;
 		} catch (Exception e) {
 			logger.debug("登录失败：用户不存在！");
@@ -94,24 +94,24 @@ public class LoginController {
 	private void test2(){
 		List<Test> list = new ArrayList();
 		Test test = new Test();
-		test.setUname("掌声");
-		test.setUpaw("zhangsheng");
-		test.setAge(20);
-		test.setSex("男");
-		list.add(test);
-		
-		test = new Test();
-		test.setUname("掌声2");
-		test.setUpaw("zhangsheng");
-		test.setAge(20);
-		test.setSex("男");
-		list.add(test);
-		
-		test = new Test();
-		test.setUname("清风");
-		test.setUpaw("qingf");
-		test.setAge(21);
-		test.setSex("女");
+//		test.setUname("掌声");
+//		test.setUpaw("zhangsheng");
+//		test.setAge(20);
+//		test.setSex("男");
+//		list.add(test);
+//		
+//		test = new Test();
+//		test.setUname("掌声2");
+//		test.setUpaw("zhangsheng");
+//		test.setAge(20);
+//		test.setSex("男");
+//		list.add(test);
+//		
+//		test = new Test();
+//		test.setUname("清风");
+//		test.setUpaw("qingf");
+//		test.setAge(21);
+//		test.setSex("女");
 		list.add(test);
 		
 		testService.insertList(list);
@@ -128,8 +128,8 @@ public class LoginController {
 			mav.setViewName("project/login/loginHome");
 			return mav;
 		}else{
-			mav.addObject("userName",test.getUname());
-			mav.addObject("passWord",test.getAge());
+			mav.addObject("userName",test.getSt_name());
+			mav.addObject("passWord",test.getSt_pass());
 			mav.setViewName("project/home");
 			return mav;
 		}

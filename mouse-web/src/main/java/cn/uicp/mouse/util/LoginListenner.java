@@ -25,12 +25,12 @@ public class LoginListenner implements HttpSessionAttributeListener {
 		String name = event.getName();  
         if (name.equals("loginuser")) {  
             Test user = (Test) event.getValue();  
-            if (map.get(user.getUname()) != null) {  
-                HttpSession session = map.get(user.getUname());  
-                session.removeAttribute(user.getUname());  
+            if (map.get(user.getSt_name()) != null) {  
+                HttpSession session = map.get(user.getSt_name());  
+                session.removeAttribute(user.getSt_name());  
                 session.invalidate();  
             }  
-            map.put(user.getUname(), event.getSession());  
+            map.put(user.getSt_name(), event.getSession());  
         }
 	}
 
@@ -39,7 +39,7 @@ public class LoginListenner implements HttpSessionAttributeListener {
 		  
         if (name.equals("loginuser")) {  
             Test user = (Test) event.getValue();  
-            map.remove(user.getUname());  
+            map.remove(user.getSt_name());  
   
         } 
 		

@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.uicp.mouse.dao.TestDao" >
     <select id="getUserName" resultType="cn.uicp.mouse.pojo.Test" parameterType="map">
-		select * from test where UPAW=#{userId}
+		select * from t_hy_emp_i where ST_LOGINNAME='admin'
 	</select>
 	<select id="getUserNameByMap" resultType="map" parameterType="map">
 		select * from test where UPAW=#{userId}
 	</select>
 	<select id="getUserNameByString" resultType="String" parameterType="map">
-		select uname from test where UPAW=#{userId}
+		select ST_LOGINNAME from t_hy_emp_i where ST_LOGINNAME=#{userId}
 	</select>
 	
 	<insert id="insertList" parameterType="cn.uicp.mouse.pojo.Test">
 	    insert into test(UNAME,UPAW,SEX,AGE) values(#{uname}, #{upaw}, #{sex}, #{age})
 	</insert>
 	<select id="selectPage" resultType="cn.uicp.mouse.pojo.Test" parameterType="map">
-  		select * from test
+  		select * from t_hy_emp_i
   	</select>
 </mapper>
