@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans    
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd    
+                        http://www.springframework.org/schema/context    
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd    
+                        http://www.springframework.org/schema/mvc    
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">  
+    <!-- 自动扫描注解的bean -->
+    <context:component-scan base-package="cn.uicp.mouse" />
+    
+    <!-- 引入properties配置文件 -->  
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <!-- 要是有多个配置文件，只需在这里继续添加即可 -->
+               <value>classpath:redis.properties</value>
+               <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+           
+    <!-- jedis 配置 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig" >
+          <property name="maxIdle" value="${reids.maxIdle}" />
+          <property name="maxWaitMillis" value="${reids.maxWait}" />
+          <property name="testOnBorrow" value="${reids.testOnBorrow}" />
+    </bean >
+    
+    <!-- redis服务器中心 -->
+    <bean id="connectionFactory"  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
+          <property name="poolConfig" ref="poolConfig" />
+          <property name="port" value="${reids.port}" />
+          <property name="hostName" value="${reids.host}" />
+          <!-- redis 默认没有密码 -->
+          <!-- <property name="password" value="${reids.password}" /> -->
+          <property name="timeout" value="${reids.timeout}" ></property>
+    </bean >
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" >
+          <property name="connectionFactory" ref="connectionFactory" />
+          <property name="keySerializer" >
+              <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+          </property>
+          <property name="valueSerializer" >
+              <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+          </property>
+    </bean >
+    
+    <!-- cache配置 -->
+    <bean id="methodCacheInterceptor" class="cn.uicp.mouse.cache.MethodCacheInterceptor" >
+          <property name="redisTemplate" ref="redisTemplate" />
+    </bean >
+    
+    <!-- aop配置切点跟通知 -->
+	<bean id="methodCachePointCut" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+    	<property name="advice" ref="methodCacheInterceptor"/>
+    	<property name="pattern" value=".*ServiceImpl.*getTimestamp"/>
+    </bean>
+  	<bean id="redisTestService" class="cn.uicp.mouse.service.impl.RedisTestServiceImpl">
+ 	</bean>
+  	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+	
+</beans>
