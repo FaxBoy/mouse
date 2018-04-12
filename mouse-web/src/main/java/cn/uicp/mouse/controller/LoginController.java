@@ -57,13 +57,13 @@ public class LoginController {
 	        //User user=loginResult(userPhone, passWord, code, request);  
 	        //把用户对象放入到session中，将会触发LoginListenner中的attributeAdded事件  
 	        request.getSession().setAttribute("loginuser", test);
-			mav.setViewName("project/home");
+			mav.setViewName("index");
 			logger.debug("登录成功："+test.getSt_name());
 			return mav;
 		} catch (Exception e) {
 			logger.debug("登录失败：用户不存在！");
 			ModelAndView mav= new ModelAndView();
-			mav.setViewName("project/login/loginHome");
+			mav.setViewName("login");
 			return mav;
 		}
 		
