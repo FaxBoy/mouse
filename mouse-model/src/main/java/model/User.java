@@ -1,39 +1,78 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * 
-* @ClassName: User 
-* @Description: TODO(简单的用户信息) 
-* @author shil
-* @date 2018年2月9日 上午11:24:32 
-*
+ * @ClassName: User
+ * @Description: TODO(简单的用户信息)
+ * @author shil
+ * @date 2018年2月9日 上午11:24:32
+ *
  */
-public class User {
-	private long id;
-	private String username;
-	private String password;
+public class User implements Serializable {
+	/**
+	 * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么)
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String id;
+	
+	private String userId;
+	
+	private String name;
+	
+	private String pass;
+	
+	private String mobile;
+	
+	private char status;
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getName() {
+		return name;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public char getStatus() {
+		return status;
+	}
+
+	public void setStatus(char status) {
+		this.status = status;
 	}
 }

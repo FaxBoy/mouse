@@ -5,10 +5,11 @@ import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
 
 import cn.uicp.mouse.pojo.Test;
+import model.User;
 
 
 @WebService
 @SOAPBinding(style =Style.RPC)  
 public interface TestWebService {
-	Test getUserName(String userId);
+	User getUserName(String userId);
 }

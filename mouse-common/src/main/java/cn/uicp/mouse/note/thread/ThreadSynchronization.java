@@ -14,11 +14,17 @@ import cn.uicp.mouse.note.thread.Factory.Person;
 public class ThreadSynchronization {
 
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+		
 		Factory factory = new Factory();
 		Person p1 = factory.getPerson();
 		Person p2 = factory.getPerson();
 		p1.start();
 		p2.start();
+		
+		long endTime = System.currentTimeMillis();    //获取结束时间
+
+		System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
 	}
 
 }

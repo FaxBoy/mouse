@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.uicp.mouse.dao.ReptileDataDao" >
+  	<select id="selectByPrimaryKey" resultType="model.UserData" parameterType="java.lang.String">
+		select * from userdata where id='0001dd735baf'
+	</select>
+	
+	<select id="insert" resultType="int" parameterType="model.ReptileData">
+		insert into reptiledata(id,Code,compname,linkman,tel,email,creationdate,address,capital,management,keyword,compurl,sourceurl) 
+		values(#{id},#{code},#{compname},#{linkman},#{tel},#{email},#{creationdate},
+		#{address},#{capital},#{management},#{keyword},#{compurl},#{sourceurl});
+	</select>
+	
+	<select id="select" resultType="model.ReptileData" parameterType="map">
+		select * from reptiledata limit #{i},1000
+	</select>
+  	
+</mapper>

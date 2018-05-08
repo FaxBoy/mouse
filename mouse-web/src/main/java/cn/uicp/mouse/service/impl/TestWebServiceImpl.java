@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import cn.uicp.mouse.dao.TestDao;
 import cn.uicp.mouse.pojo.Test;
 import cn.uicp.mouse.service.TestWebService;
+import model.User;
 
 @WebService
 @SOAPBinding(style=Style.RPC)
@@ -20,7 +21,7 @@ static Logger logger = Logger.getLogger(testServiceImpl.class);
 	@Resource
 	private TestDao testDao;
 	
-	public Test getUserName(String userId) {
+	public User getUserName(String userId) {
 		return testDao.getUserName(userId);
 	}
 

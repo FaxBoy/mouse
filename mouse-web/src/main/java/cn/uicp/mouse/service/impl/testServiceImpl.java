@@ -13,6 +13,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import cn.uicp.mouse.dao.TestDao;
 import cn.uicp.mouse.pojo.Test;
 import cn.uicp.mouse.service.TestService;
+import model.User;
 
 
 @Service
@@ -23,7 +24,7 @@ public class testServiceImpl extends ServiceSupportImpl<Test, String> implements
 	@Resource
 	private TestDao testDao;
 	
-	public Test getUserName(String userId) {
+	public User getUserName(String userId) {
 		return testDao.getUserName(userId);
 	}
 

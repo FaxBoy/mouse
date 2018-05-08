@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import cn.uicp.mouse.pojo.Test;
+import model.User;
 
 
 public interface TestService extends ServiceSupport<Test, String>{
 	
-	Test getUserName(String userId);
+	User getUserName(String userId);
 	
 	Map getUserNameByMap(String userId);
 	

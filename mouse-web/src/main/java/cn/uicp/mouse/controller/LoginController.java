@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import cn.uicp.mouse.pojo.Test;
 import cn.uicp.mouse.service.TestService;
 import cn.uicp.mouse.util.mybatis.paginator.domain.PageList;
+import model.User;
 
 
 /**
@@ -49,18 +50,19 @@ public class LoginController {
 		//test();//测试
 		//test2();//测试事务
 		try {
-			Test test=testService.getUserName("admin");
+			User user=testService.getUserName("admin");
 			ModelAndView mav= new ModelAndView();
-			mav.addObject("userName",test.getSt_name());
-			mav.addObject("passWord",test.getSt_pass());
+			mav.addObject("userName",user.getName());
+			mav.addObject("passWord",user.getPass());
 			//登录验证并返回登录成功用户对象  
 	        //User user=loginResult(userPhone, passWord, code, request);  
 	        //把用户对象放入到session中，将会触发LoginListenner中的attributeAdded事件  
-	        request.getSession().setAttribute("loginuser", test);
+	        request.getSession().setAttribute("loginuser", user);
 			mav.setViewName("index");
-			logger.debug("登录成功："+test.getSt_name());
+			logger.debug("登录成功："+user.getName());
 			return mav;
 		} catch (Exception e) {
+			logger.debug(e.getMessage());
 			logger.debug("登录失败：用户不存在！");
 			ModelAndView mav= new ModelAndView();
 			mav.setViewName("login");
