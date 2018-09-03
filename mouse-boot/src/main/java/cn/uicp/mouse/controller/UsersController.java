@@ -21,9 +21,9 @@ public class UsersController {
 		if ("admin".equals(username) && "123456".equals(password)) {
 			ResponseData responseData = ResponseData.ok();
 			User user = new User();
-			user.setId(1);
-			user.setUsername(username);
-			user.setPassword(password);
+			user.setId("1");
+			user.setName(username);
+			user.setPass(password);
 			responseData.putDataValue("user", user);
 			String token = JWT.sign(user, 30L * 24L * 3600L * 1000L);
 			if (token != null) {

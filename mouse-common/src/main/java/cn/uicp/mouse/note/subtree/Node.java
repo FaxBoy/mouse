@@ -1,6 +1,9 @@
 package cn.uicp.mouse.note.subtree;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Node {
 
@@ -100,6 +103,35 @@ public class Node {
         }
         list.add(node);
         return list;
+	}
+	
+	
+	/**
+	 * 
+	* @Title: spanQueue 
+	* @Description: TODO(广度优先 按照层级，需使用队列 Queue)
+	* @author shil
+	* @date 2018年9月3日 上午10:52:58 
+	* @param @param node
+	* @param @return    设定文件 
+	* @return ArrayList<Node>    返回类型 
+	* @throws
+	 */
+	public static ArrayList<Node> spanQueue(Node node){
+		ArrayList<Node> lists=new ArrayList<Node>();
+        if(node==null)
+            return lists;
+        Queue<Node> queue=new LinkedList<Node>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+        		Node tree=queue.poll();
+            if(tree.lchid!=null)
+                queue.offer(tree.lchid);
+            if(tree.rchid!=null)
+                queue.offer(tree.rchid);
+            lists.add(tree);
+        }
+        return lists;
 	}
 	
 }

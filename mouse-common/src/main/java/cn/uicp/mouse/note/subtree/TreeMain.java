@@ -45,10 +45,16 @@ public class TreeMain {
 		TreeMain tree = new TreeMain();
 		//System.out.println(tree.root);
 		List<Node> list=new ArrayList<Node>();
-		list=Node.postOrder(tree.root, list);
+		List<Node> list2=new ArrayList<Node>();
+		list=Node.spanQueue(tree.root);
 		for (Node node : list) {
 			System.out.println(node.data);
 		}
 	}
+	
+	
+	
+	
+	
 
 }

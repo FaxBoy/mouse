@@ -32,7 +32,7 @@ public class JWT {
 			claims.put(PAYLOAD, jsonString);
 			System.out.println(System.currentTimeMillis() + maxAge);
 			System.out.println(System.currentTimeMillis() + 10000);
-			claims.put(EXP, System.currentTimeMillis() + 20000);
+			claims.put(EXP, System.currentTimeMillis() + 200000);
 			//claims.put(EXP, 10000);
 			return signer.sign(claims);
 		} catch(Exception e) {
