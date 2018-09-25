@@ -51,6 +51,16 @@
         <property name="maxUploadSize" value="10485760000" />    
         <!-- 内存中的最大值 -->  
         <property name="maxInMemorySize" value="40960" />    
-    </bean>   
+    </bean> 
+    
+    <!-- 通用 Mapper -->
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+	    <property name="basePackage" value="cn.uicp.mouse.dao"/>
+	    <property name="properties">
+	        <value>
+	            mappers=tk.mybatis.mapper.common.Mapper
+	        </value>
+	    </property>
+	</bean>
   
 </beans>

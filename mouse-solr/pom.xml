@@ -319,6 +319,13 @@
 		    <artifactId>poi</artifactId>
 		    <version>3.17</version>
 		</dependency>
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		
+		
 	</dependencies>
 
 	<build>
