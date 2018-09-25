@@ -19,14 +19,14 @@
 					<key>needs-shine</key>
 					<false/>
 					<key>url</key>
-					<string>http://172.18.1.231/TH_SZJC/upload/app/logo@2x.png</string>
+					<string></string>
 				</dict>
 				<dict>
 					<key>kind</key>
 					<string>display-image</string>
 					<key>needs-shine</key>
 					<false/>
-					<key>http://172.18.1.231/TH_SZJC/upload/app/logo@3x.png</key>
+					<key>url</key>
 					<string></string>
 				</dict>
 			</array>
@@ -35,13 +35,13 @@
 				<key>bundle-identifier</key>
 				<string>com.wavenet.taiHuWarningProject</string>
 				<key>bundle-version</key>
-				<string>1</string>
+				<string>72</string>
 				<key>kind</key>
 				<string>software</string>
 				<key>subtitle</key>
-				<string>v1.0.0</string>
+				<string>v2.4.9</string>
 				<key>title</key>
-				<string>水政执法巡查监控系统</string>
+				<string>澶箹灞�鍔炲叕骞冲彴</string>
 			</dict>
 		</dict>
 	</array>
