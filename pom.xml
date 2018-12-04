@@ -28,5 +28,6 @@
 		<module>mouse-security</module>
 		<module>mouse-restful</module>
 		<module>mouse-activity</module>
+		<module>mouse-solr</module>
 	</modules>
 </project>

@@ -162,7 +162,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.1.41</version>
+			<version>1.2.7</version>
 		</dependency>
 
 
@@ -309,11 +309,6 @@
 			<artifactId>mouse-model</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.github.abel533</groupId>
-			<artifactId>mapper</artifactId>
-			<version>2.2.0</version>
-		</dependency> -->
 		<dependency>
 		    <groupId>org.apache.poi</groupId>
 		    <artifactId>poi</artifactId>
@@ -324,9 +319,23 @@
 			<artifactId>mapper</artifactId>
 			<version>4.0.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>wavenet.releases.project</groupId>
+			<artifactId>cors-filter</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 		
 		
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>nexux</id>
+			<name>wavenetNexus</name>
+			<url>http://172.18.0.25:8081/repository/maven-releases/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
