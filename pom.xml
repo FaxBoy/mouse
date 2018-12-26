@@ -29,5 +29,9 @@
 		<module>mouse-restful</module>
 		<module>mouse-activity</module>
 		<module>mouse-solr</module>
+		<module>springboot-swagger-ui</module>
+		<module>springboot-shiro</module>
+		<module>springcloud-eureka-server</module>
+		<module>springcloud-product-service</module>
 	</modules>
 </project>
