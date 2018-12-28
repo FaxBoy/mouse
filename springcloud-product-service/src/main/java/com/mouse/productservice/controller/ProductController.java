@@ -1,7 +1,10 @@
 package com.mouse.productservice.controller;
 
+import com.mouse.productservice.model.Product;
 import com.mouse.productservice.service.ProductService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +23,9 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Value("${server.port}")
+    private String port;
+
     @RequestMapping("list")
     public Object list(){
         return productService.listProduct();
@@ -27,7 +33,17 @@ public class ProductController {
 
     @RequestMapping("find")
     public Object find(@RequestParam("id") int id){
-        return productService.findById(id);
+
+        Product product = productService.findById(id);
+        Product result = new Product();
+        BeanUtils.copyProperties(product,result);
+        result.setName(product.getName()+" data from prot : "+port);
+        return result;
+    }
+
+    @RequestMapping("getPort")
+    public String getPort(){
+        return port;
     }
 
 }

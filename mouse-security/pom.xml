@@ -10,8 +10,8 @@
 	</parent>
 
 	<packaging>war</packaging>
-	<artifactId>mouse-sucerity</artifactId>
-	<name>mouse-sucerity</name>
+	<artifactId>mouse-security</artifactId>
+	<name>mouse-security</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,0 +1,1254 @@
+﻿<!DOCTYPE html>
+<script src="js/jquery-1.9.1.js"></script>
+<link href="Mtool/mtool.css" rel="stylesheet" />
+<script src="Mtool/mtool.js"></script>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script>
+        //纠偏服务:http://www.shanghai-map.net/wgs2tdt/transform.asmx
+        //方法名：
+        //WGS84转天地图 ：WGS84TOTDT
+        //天地图转WGS84 ：TDTTOWGS84
+        //类型：webserice
+        //参数：x：经度，y：纬度
+        //结果示例：{status:"success",x:"121.3",y:"31.3"}
+        //json对象，status为"success"时执行成功，"failed"时执行失败
+    </script>
+    <script>
+        var basemapurl = ["http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_D/MapServer", "http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_DZJ/MapServer", "http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_IMAGE/MapServer", "http://mape.shanghai-map.net/ArcGIS/rest/services/SHMAP_FRAME/MapServer"];
+        var geometryurl = "http://180.168.108.214/arcgis/rest/services/Utilities/Geometry/GeometryServer";
+        var lichengzhuangurl = "http://180.168.108.214/arcgis/rest/services/dfcmap2_WGS84_20180620/MapServer?token=zD6TG7t92cjLafgwpWw_sUpN82yfdLv_1DlGMTQCGjo."
+        var lichengzhuangurl = "http://180.168.108.214/arcgis/rest/services/TIANDITU/MapServer";
+
+        var jiekouUrl = "http://180.168.108.212:5090/Controller";
+        var mapurl = "";
+        var conurl = "";
+        var imgurl = "";
+        var protocol = "http";
+        var mapport = ""; var conport = ""; var imgport = "";
+        $(mousection () {
+            var url = window.location.href;
+            if (url.indexOf("31.16.") == 7 || url.indexOf("12.0.") == 7) {
+                mapurl = "http://31.16.7.209:6080";
+                conurl = "http://31.16.7.111:9006/Controller"
+                imgurl = "http://31.16.7.208:7007";
+            } else {
+                mapurl = "http://180.168.108.214";
+                conurl = "http://180.168.108.212:5090/Controller";
+                imgurl = "http://180.168.108.214:5080";
+            }
+
+            getDanweis();
+            getRenyuans();
+            var today = new Date();
+            $("#startdate").val(today.Format("yyyy-MM-dd"));
+            $("#enddate").val(today.Format("yyyy-MM-dd"));
+
+            //var mtype = GetQueryString("nettype");
+            if (url.indexOf("31.16.") == 7 || url.indexOf("12.0.") == 7) {
+                //测绘院本地地图
+                $(".waiwang").wrap("<span style='display:none'>");
+
+                $("#ditu").val(0);
+                map = initMap("map", mapurl + "/arcgis/rest/services/WGS84_GoogleStyle/MapServer?token=zD6TG7t92cjLafgwpWw_sUpN82yfdLv_1DlGMTQCGjo.");
+
+                lichengzhuangurl = "http://31.16.7.209:6080/arcgis/rest/services/TIANDITU/MapServer";
+
+                require(["esri/geometry/Point"], mousection (Point) {
+                    var centerpoint = new Point(121.56841778415108, 31.249819010441698, map.spatialReference);
+                    map.centerAndZoom(centerpoint, 1);
+                })
+
+            }
+            else {
+                $(".neiwang").wrap("<span style='display:none'>");
+
+                map = initMap("map", basemapurl);
+            }
+
+
+
+            lczlayer = map.addDynamicMapServiceLayer(lichengzhuangurl);
+            guijilayer = map.newGraphicsLayer();
+            shijianlayer = map.newGraphicsLayer();
+            weizhilayer = map.newGraphicsLayer();
+
+            guijilayer.on("mouse-move", mousection (evt) {
+                var g = evt.graphic;
+                if (g.geometry.type == "point") {
+                    var title = g.attributes.title;
+                    var content = g.attributes.content;
+                    map.infoWindow.setTitle(title);
+                    map.infoWindow.setContent(content);
+                    map.infoWindow.resize(320, 100);
+                    map.infoWindow.show(evt.screenPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                    g.setSymbol(g.bigsymbol);
+                    map.setMapCursor("pointer");
+                }
+            })
+            guijilayer.on("mouse-out", mousection (evt) {
+                var g = evt.graphic;
+                if (g.geometry.type == "point") {
+                    g.setSymbol(g.defaultsymbol);
+                    map.setMapCursor("default");
+                }
+            })
+            shijianlayer.on("click", mousection (evt) {
+                var g = evt.graphic;
+                var title = g.attributes.title;
+                var content = g.attributes.content;
+                map.infoWindow.setTitle(title);
+                map.infoWindow.setContent(content);
+                map.infoWindow.resize(480, 400);
+                map.infoWindow.show(evt.screenPoint, map.getInfoWindowAnchor(evt.screenPoint));
+            })
+            shijianlayer.on("mouse-move", mousection (evt) {
+                var g = evt.graphic;
+                g.setSymbol(g.symbol.setSize(15));
+                map.setMapCursor("pointer");
+            })
+            shijianlayer.on("mouse-out", mousection (evt) {
+                var g = evt.graphic;
+                g.setSymbol(g.symbol.setSize(10));
+                map.setMapCursor("default");
+            })
+            weizhilayer.on("mouse-move", mousection (evt) {
+                var g = evt.graphic;
+                var title = g.attributes.title;
+                var content = g.attributes.content;
+                map.infoWindow.setTitle(title);
+                map.infoWindow.setContent(content);
+                map.infoWindow.resize(280, 86);
+                map.infoWindow.show(evt.screenPoint, map.getInfoWindowAnchor(evt.screenPoint));
+                g.setSymbol(g.bigsymbol);
+                map.setMapCursor("pointer");
+            })
+            weizhilayer.on("mouse-out", mousection (evt) {
+                var g = evt.graphic;
+                g.setSymbol(g.defaultsymbol);
+                map.setMapCursor("default");
+            })
+        })
+        //$(document).on("click", ".picture", mousection (evt) {
+
+        //    var imgsrc = $(this).attr("src");
+        //    $("#imgcontent").attr("src", imgsrc);
+        //    $("#imgcontent").height($("#imgshower").height());
+
+        //    $("#imgshower").show();
+        //})
+        mousection showPicture(thisimg) {
+            var imgsrc = $(thisimg).attr("src");
+            $("#imgcontent").attr("src", imgsrc);
+            $("#imgcontent").height($("#imgshower").height());
+
+            $("#imgshower").show();
+        }
+
+        mousection closeImg() {
+            $("#imgshower").hide();
+            $("#imgcontent").attr("src", "");
+        }
+        mousection showOriginalImg() {
+            $("#imgcontent").css("height", "auto");
+        }
+
+        //单位列表
+        mousection getDanweis() {
+            $.ajax({
+                url: conurl,
+                type: "GET",
+                async: true,
+                dataType: 'json',
+                data: {
+                    cmd: "TdtRouteXcDeptQueryAction",
+                    xctype: 0,
+                    userId: "chenjl"
+                },
+                success: mousection (res) {
+
+                    var res = res.infoList.OptionItem;
+                    for (var i = 0; i < res.length; i++) {
+                        var option = "<option value='" + res[i]["value"][0] + "'>" + res[i]["label"][0] + "</option>";
+                        $("#danwei").append(option);
+                    }
+                },
+                err: mousection (err) {
+                    console.log(err);
+                }
+            });
+        }
+        //人员列表
+        mousection getRenyuans() {
+            $.ajax({
+                url: conurl,
+                type: "GET",
+                async: true,
+                dataType: 'json',
+                data: {
+                    cmd: "TdtRouteXcManQueryAction",
+                    danwei: $("#danwei").val(),
+                    userId: "chenjl"
+                },
+                success: mousection (res) {
+                    $("#renyuanlist").html("");
+                    res = res.infoList.OptionItem;
+                    if (res == null) {
+                        return;
+                    }
+                    for (var i = 0; i < res.length; i++) {
+                        var checkbox = "<li><input type='checkbox' name='renyuan' value='" + res[i]["value"][0] + "' data-label='" + res[i]["label"][0] + "'/><span >" + res[i]["label"][0] + "</span></li>";
+                        $("#renyuanlist").append(checkbox);
+                    }
+                }
+            });
+
+        }
+
+        var _type;
+        //轨迹查询
+        mousection guijiChaxun() {
+            reset();
+            _type = "guijichaxun";
+            var danwei = $("#danwei").val();
+            if (danwei != 0 && danwei != "0") {
+                guijiChaxun0(danwei);
+            }
+            else {
+                $("#danwei").find("option").each(mousection () {
+                    var danwei = $(this).val();
+                    if (danwei != 0) {
+                        guijiChaxun0(danwei);
+                    }
+                })
+            }
+        }
+
+        mousection guijiChaxun0(danwei) {
+            $("#loading").show();
+
+            $.ajax({
+                url: conurl,
+                type: "POST",
+                async: true,
+                dataType: 'json',
+                data: {
+                    cmd: "TdtRouteQueryAction",
+                    url_count: 11,
+                    danwei: danwei,
+                    xchd: $("#xchd").val(),
+                    xctype: 0,
+                    userId: "chenjl",
+                    man: $("#renyuan").data("code") == null ? 0 : $("#renyuan").data("code"),
+                    startDate: $("#startdate").val(),
+                    endDate: $("#enddate").val(),
+                    timeChooser: $("#timeChooser").val(),
+                },
+                success: mousection (res) {
+                    if (_type != "guijichaxun") {
+                        return;
+                    }
+                    $("#loading").hide();
+                    try {
+                        res = res.infoList.RouteList;
+                    } catch (e) {
+                        res = null;
+                    }
+                    if (res == null) {
+                        return;
+                    }
+                    require(["esri/geometry/Polyline", "esri/geometry/Point", "esri/symbols/SimpleLineSymbol", "esri/symbols/PictureMarkerSymbol", "esri/symbols/TextSymbol", "esri/graphic", "esri/Color", "esri/symbols/Font", "esri/symbols/SimpleMarkerSymbol", "esri/InfoTemplate"], mousection (Polyline, Point, SimpleLineSymbol, PictureMarkerSymbol, TextSymbol, Graphic, Color, Font, SimpleMarkerSymbol, InfoTemplate) {
+                        for (var i in res) {
+                            route = res[i];
+                            var RouteNode = route.RouteNode;
+
+                            var path = [];
+                            for (var j in RouteNode) {
+                                var node = RouteNode[j];
+                                path.push([node.nm_x[0], node.nm_y[0]]);
+                            }
+                            var polylineJson = {
+                                "paths": [path],
+                                "spatialReference": map.spatialReference
+                            };
+                            var gjline = new Polyline(polylineJson);
+                            var symbol = new SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new Color("#" + route.color[0].substr(2)), 1);
+                            var graphic = new Graphic(gjline, symbol);
+
+                            guijilayer.add(graphic);
+
+                            for (var k in RouteNode) {
+                                var node = RouteNode[k];
+                                var gpoint = new Point(node.nm_x[0], node.nm_y[0], map.spatialReference);
+
+                                if (k == 0) {
+                                    var defaultsymbol = new PictureMarkerSymbol('image/三角形.png', 8, 8);
+                                    var bigsymbol = new PictureMarkerSymbol('image/三角形.png', 14, 14);
+                                }
+                                else if (k == RouteNode.length - 1) {
+                                    var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 1), new Color([255, 0, 0, 1]));
+                                    var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 2), new Color([255, 0, 0, 1]));
+                                }
+                                else if (node.nfcId != null && node.nfcId.length > 0) {
+                                    var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([35, 243, 51, 1]), 3), new Color("#" + route.color[0].substr(2)));
+                                    var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 15, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([35, 243, 51, 1]), 2), new Color("#" + route.color[0].substr(2)));
+                                }
+
+                                else {
+                                    //var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 1), new Color("#" + route.color[0].substr(2)));
+                                    //var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 2), new Color("#" + route.color[0].substr(2)));
+
+                                    var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0, 1]), 1), new Color([255, 15, 15, 1]));
+                                    var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0, 1]), 2), new Color([255, 15, 15, 1]));
+                                }
+
+                                var attributes = {
+                                    empName: route.empName[0],
+                                    deptName: route.deptName[0],
+                                    carName: route.carName[0] == "null" ? "" : route.carName[0],
+                                    tm: node.tm[0],
+                                    title: route.empName[0],
+                                    content: "单位名称:" + route.deptName[0] + "<br/>巡查时间:" + node.tm[0] + "<br/>手机号:" + (route.tel == null ? "" : (route.tel[0] == "null" ? "" : route.tel[0]))
+                                }
+
+                                var graphic = new Graphic(gpoint, defaultsymbol, attributes);
+
+                                graphic.defaultsymbol = defaultsymbol;
+                                graphic.bigsymbol = bigsymbol;
+                                guijilayer.add(graphic);
+
+                            }
+                        }
+                    })
+
+                    guijilayer.guijidata = guijilayer.guijidata.concat(res);;
+                    $("#huifang_button").removeAttr("disabled");
+                },
+                err: mousection (err) {
+                    console.log(err);
+                }
+            });
+        }
+        //事件查询
+        mousection shijianChaxun() {
+            reset();
+            _type = "shijianchaxun";
+
+            console.info(conurl + "?cmd=TdtRouteXcReshowAction_2nd&url_count=51" +
+					"&danwei=" + $("#danwei").val() + "&xchd=" + $("#xchd").val() + "&userId=chenjl&man=0" +
+					"&startDate=" + $("#startdate").val() + "&endDate=" + $("#enddate").val() + "&timeChooser=" + $("#timeChooser").val());
+
+
+            $("#loading").show();
+            $.ajax({
+                url: conurl,
+                type: "GET",
+                async: true,
+                dataType: 'json',
+                data: {
+                    cmd: "TdtRouteXcReshowAction_2nd",
+                    url_count: 51,
+                    danwei: $("#danwei").val(),
+                    xchd: $("#xchd").val(),
+                    xctype: 0,
+                    userId: "chenjl",
+                    man: $("#renyuan").data("code") == null ? 0 : $("#renyuan").data("code"),
+                    startDate: $("#startdate").val(),
+                    endDate: $("#enddate").val(),
+                    timeChooser: $("#timeChooser").val(),
+                },
+                success: mousection (res) {
+                    $("#loading").hide();
+                    if (_type != "shijianchaxun") {
+                        return;
+                    }
+                    try {
+                        res = res.infoList.item;
+                    } catch (e) {
+                        res = null;
+                    }
+
+                    if (res == null) {
+                        return;
+                    }
+                    //console.log(res[0])
+
+                    require(["esri/geometry/Polyline", "esri/geometry/Point", "esri/symbols/SimpleLineSymbol", "esri/symbols/PictureMarkerSymbol", "esri/symbols/TextSymbol", "esri/graphic", "esri/Color", "esri/symbols/Font", "esri/symbols/SimpleMarkerSymbol", "esri/InfoTemplate"], mousection (Polyline, Point, SimpleLineSymbol, PictureMarkerSymbol, TextSymbol, Graphic, Color, Font, SimpleMarkerSymbol, InfoTemplate) {
+                        for (var i = 0; i < res.length; i++) {
+                            var item = res[i];
+                            console.info(item)
+                            try {
+                                var gpoint = new Point(parseFloat(item.nm_x[0]), parseFloat(item.nm_y[0]), map.spatialReference);
+                                var flows = item.flows[0].flow;
+
+                                var imgcontent = "";
+                                for (var j = 0; j < flows.length; j++) {
+                                    var imgsrcs = flows[j].PICS != null ? flows[j].PICS[0].split(",") : "";
+                                    console.info(imgsrcs)
+                                    if (imgsrcs != "") {
+                                        for (var k = 0; k < imgsrcs.length; k++) {
+                                            var river = item.RIVER != null ? item.RIVER[0] : "";
+                                            var lcz = item.LCZ[0] != null ? item.LCZ[0] : "";
+                                            imgcontent += "<div ><div><img src='" + imgurl + imgsrcs[k] + "' width='414' height='240' class='picture' onclick='showPicture(this)'/>  <div>状态:" + flows[j].TYPE[0] + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp桩号:" + river + " " + lcz + "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp处理时间:" + flows[j].TIME[0] + "<br/>描述:" + flows[j].MSG[0] + "</div></div><div class='left' onclick='goLeft(this)'></div><div class='right' onclick='goRight(this)'></div></div>";
+                                        }
+                                    }
+                                }
+                                if (imgcontent == "") {
+                                    imgcontent = "<div class='picturemiss' style='width:414px;height:240px'> </div>";
+                                }
+                                var flowcontent = "<table class='table'><tr><th style='width:30px;'>状态</th><th style='width:40px;'>人员</th><th style='width:120px;'>处理时间</th><th>处理部门</th><th>描述</th></tr>"
+                                for (var j = 0; j < flows.length; j++) {
+                                    flowcontent += "<tr><td>" + flows[j].TYPE[0] + "</td><td>" + flows[j].PERSON[0] + "</td><td>" + flows[j].TIME[0] + "</td><td>" + flows[j].DEPT[0] + "</td><td>" + flows[j].MSG[0] + "</td></tr>";
+                                }
+
+                                flowcontent += "</table>";
+
+                                var content = '<div id="page-wrap"><div id="slot-machine-tabs"><ul class="tabs"><li class="current" data-linktype="image" onclick="tabsSwitch(this)">图片</li><li data-linktype="flows"  onclick="tabsSwitch(this)">流程</li></ul></div><div class="box-wrapper"><div id="one" class="content-box image">' + imgcontent + '</div><div id="two" class="content-box flows">' + flowcontent + '</div></div>';
+
+                                var attributes = { state: item.STATE[0], flows: item.flows[0].flow, title: item.REPORTNO[0], content: content, clicked: false }
+                                var symbol;
+                                switch (item.STATE[0]) {
+                                    case "发现":
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([76, 76, 76, 0.5]), 1), new Color([153, 153, 153, 1]));
+                                        break;
+                                    case "立案":
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([76, 76, 76, 0.5]), 1), new Color([255, 223, 70, 1]));
+                                        break;
+                                    case "派遣":
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([76, 76, 76, 0.5]), 1), new Color([230, 74, 14, 1]));
+                                        break;
+                                    case "处理":
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([76, 76, 76, 0.5]), 1), new Color([0, 120, 193, 1]));
+                                        break;
+                                    case "结案":
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([76, 76, 76, 0.5]), 1), new Color([133, 228, 8, 1]));
+                                        break;
+                                    default:
+                                        symbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0, 0.5]), 1), new Color([255, 0, 0, 1]));
+                                        break;
+
+                                }
+                                var graphic = new Graphic(gpoint, symbol, attributes);
+                                graphic.state = item.STATE[0];
+                                shijianlayer.add(graphic);
+                            } catch (e) {
+
+                            }
+
+
+
+                        }
+                    })
+
+                    $("#huifang_button").attr("disabled", "disabled");
+
+                },
+                err: mousection (err) {
+                    console.log(err);
+                    $("#loading").hide();
+
+                }
+            });
+        }
+        //最新位置
+        mousection zuixinWeizhi() {
+            reset();
+            _type = "zuixinweizhi";
+            $("#loading").show();
+            $.ajax({
+                url: conurl,
+                type: "POST",
+                async: true,
+                dataType: 'json',
+                data: {
+                    cmd: "TdtRouteXcLastPosAction",
+                    url_count: "25",
+                    danwei: $("#danwei").val(),
+                    xchd: $("#xchd").val(),
+                    xctype: 0,
+                    userId: "chenjl",
+                    man: $("#renyuan").data("code") == null ? 0 : $("#renyuan").data("code"),
+                    startDate: $("#startdate").val(),
+                    endDate: $("#enddate").val(),
+                    timeChooser: $("#timeChooser").val()
+                },
+                success: mousection (res) {
+                    $("#loading").hide();
+
+
+                    try {
+                        res = res = res.infoList.RouteList;
+                    } catch (e) {
+                        res = null;
+                    }
+                    if (res == null) {
+                        return;
+                    }
+                    //console.log(res[0])
+                    require(["esri/geometry/Polyline", "esri/geometry/Point", "esri/symbols/SimpleLineSymbol", "esri/symbols/PictureMarkerSymbol", "esri/symbols/TextSymbol", "esri/graphic", "esri/Color", "esri/symbols/Font", "esri/symbols/SimpleMarkerSymbol", "esri/InfoTemplate", "esri/symbols/PictureMarkerSymbol"], mousection (Polyline, Point, SimpleLineSymbol, PictureMarkerSymbol, TextSymbol, Graphic, Color, Font, SimpleMarkerSymbol, InfoTemplate, PictureMarkerSymbol) {
+                        for (var i = 0; i < res.length; i++) {
+                            var item = res[i];
+
+                            var gpoint = new Point(item.RouteNode[0].nm_x[0], item.RouteNode[0].nm_y[0], map.spatialReference);
+                            var symbol = new PictureMarkerSymbol('image/shanshuo.gif', 15, 15);
+                            var bigsymbol = new PictureMarkerSymbol('image/shanshuotwo.gif', 15, 15);
+                            var attributes = {
+                                empName: item.empName[0],
+                                deptName: item.deptName[0],
+                                carName: item.carName[0] == "null" ? "" : item.carName[0],
+                                tm: item.RouteNode[0].tm[0],
+                                title: item.empName[0],
+                                content: "单位名称:" + item.deptName[0] + "<br/>巡查时间:" + item.RouteNode[0].tm[0] + "<br/>手机号:" + (item.tel == null ? "" : (item.tel[0] == "null" ? "" : item.tel[0]))
+                            }
+                            var graphic = new Graphic(gpoint, symbol, attributes);
+                            graphic.defaultsymbol = symbol;
+                            graphic.bigsymbol = bigsymbol;
+                            weizhilayer.add(graphic);
+                        }
+                    })
+
+                },
+                err: mousection (err) {
+                    console.log(err);
+                    $("#loading").hide();
+
+                }
+            });
+        }
+        //轨迹回放
+        var guijiPlayTimer;
+        var speed = 1;
+        var lineindex = 0;
+        var nodeindex = 0;
+        var guijidata;
+        mousection guijiPlayOrStop(thisbutton) {
+            $("#loading").show();
+            setTimeout('$("#loading").hide()', 500);
+
+            if ($(thisbutton).val() == "轨迹回放") {
+                $(thisbutton).val("停止回放");
+                guijidata = guijilayer.guijidata;
+                lineindex = 0;
+                nodeindex = 0;
+                guijilayer.clear();
+                map.infoWindow.hide();
+                guijiPlay();
+            }
+            else {
+                $(thisbutton).val("轨迹回放");
+                clearTimeout(guijiPlayTimer);
+                lineindex = -1000;
+            }
+        }
+        mousection guijiPlay() {
+            require(["esri/geometry/Polyline", "esri/geometry/Point", "esri/symbols/SimpleLineSymbol", "esri/symbols/PictureMarkerSymbol", "esri/symbols/TextSymbol", "esri/graphic", "esri/Color", "esri/symbols/Font", "esri/symbols/SimpleMarkerSymbol", "esri/InfoTemplate"], mousection (Polyline, Point, SimpleLineSymbol, PictureMarkerSymbol, TextSymbol, Graphic, Color, Font, SimpleMarkerSymbol, InfoTemplate) {
+                guijilayer.clear();
+                if (lineindex < guijidata.length && lineindex >= 0) {
+                    var route = guijidata[lineindex];
+                    var RouteNode = route.RouteNode;
+                    if (nodeindex < RouteNode.length) {
+
+                        var path = [];
+                        for (var i = 0; i <= nodeindex; i++) {
+                            var node = RouteNode[i];
+                            path.push([node.nm_x[0], node.nm_y[0]]);
+                        }
+                        var polylineJson = {
+                            "paths": [path],
+                            "spatialReference": map.spatialReference
+                        };
+                        var gjline = new Polyline(polylineJson);
+                        var symbol = new SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new Color("#" + route.color[0].substr(2)), 1);
+                        var graphic = new Graphic(gjline, symbol);
+                        guijilayer.add(graphic);
+
+
+                        for (var k = 0; k <= nodeindex; k++) {
+                            var node = RouteNode[k];
+                            var gpoint = new Point(node.nm_x[0], node.nm_y[0], map.spatialReference);
+
+                            if (k == 0) {
+                                var defaultsymbol = new PictureMarkerSymbol('image/三角形.png', 8, 8);
+                                var bigsymbol = new PictureMarkerSymbol('image/三角形.png', 14, 14);
+                            }
+                            else if (k == RouteNode.length - 1) {
+                                var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 1), new Color([255, 0, 0, 1]));
+                                var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 2), new Color([255, 0, 0, 1]));
+                            }
+                            else {
+                                var defaultsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 6, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 1), new Color("#" + route.color[0].substr(2)));
+                                var bigsymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 12, new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([153, 153, 153, 1]), 2), new Color("#" + route.color[0].substr(2)));
+                            }
+
+                            var attributes = {
+                                empName: route.empName[0],
+                                deptName: route.deptName[0],
+                                carName: route.carName[0] == "null" ? "" : route.carName[0],
+                                tm: node.tm[0],
+                                title: route.empName[0],
+                                content: "单位名称:" + route.deptName[0] + "<br/>巡查时间:" + node.tm[0] + "<br/>手机号:" + (route.tel == null ? "" : (route.tel[0] == "null" ? "" : route.tel[0]))
+                            }
+
+                            var graphic = new Graphic(gpoint, defaultsymbol, attributes);
+
+                            graphic.defaultsymbol = defaultsymbol;
+                            graphic.bigsymbol = bigsymbol;
+                            guijilayer.add(graphic);
+
+                        }
+                        var mapPoint = new Point(RouteNode[nodeindex].nm_x[0], RouteNode[nodeindex].nm_y[0], map.spatialReference);
+                        map.centerAt(mapPoint);
+                        nodeindex++;
+                    }
+                    else {
+                        lineindex++;
+                        nodeindex = 0;
+
+                    }
+
+                    var time = 1000 / speed;
+                    guijiPlayTimer = setTimeout("guijiPlay()", time);
+                }
+                else {
+                    clearTimeout(guijiPlayTimer);
+                    lineindex = -1000;
+                    nodeindex = 0;
+                }
+            })
+        }
+        mousection guijiStop() {
+            lineindex = -1000;
+            nodeindex = 0;
+            clearTimeout(guijiPlayTimer);
+        }
+
+        mousection reset() {
+            $("#huifang_button").val("轨迹回放");
+            $("#huifang_button").attr("disabled", "disabled");
+            guijilayer.clear();
+            shijianlayer.clear();
+            weizhilayer.clear();
+            map.infoWindow.hide();
+            guijiStop();
+            guijilayer.guijidata = [];
+        }
+        mousection graphicslayerClear() {
+            map.infoWindow.hide();
+            guijilayer.clear();
+            shijianlayer.clear();
+            weizhilayer.clear();
+        }
+        //图层控制
+        mousection switchBasemap() {
+            var index = $("#ditu").val();
+            map.switchBasemap(index);
+        }
+        mousection toggleHaianxian(thisbutton) {
+            var ishow = $(thisbutton).prop("checked");
+            if (ishow) {
+                lczlayer.show();
+            }
+            else {
+                lczlayer.hide();
+            }
+        }
+        mousection toggleGuiji(thisbutton) {
+            var ishow = $(thisbutton).prop("checked");
+            if (ishow) {
+                guijilayer.show();
+            }
+            else {
+                guijilayer.hide();
+            }
+        }
+        mousection toggleShijian(state, thisbutton) {
+            var ishow = $(thisbutton).prop("checked");
+            if (state == "所有") {
+                if (ishow) {
+                    shijianlayer.show();
+                    $(".shijian").prop("checked", true);
+                }
+                else {
+                    shijianlayer.hide();
+                    $(".shijian").prop("checked", false);
+                }
+            }
+            else {
+                if (ishow) {
+                    for (var i = 0; i < shijianlayer.graphics.length; i++) {
+                        var graphic = shijianlayer.graphics[i];
+                        if (graphic.state == state) {
+                            graphic.show();
+                        }
+                    }
+                }
+                else {
+                    for (var i = 0; i < shijianlayer.graphics.length; i++) {
+                        var graphic = shijianlayer.graphics[i];
+                        if (graphic.state == state) {
+                            graphic.hide();
+                        }
+                    }
+                }
+            }
+        }
+
+    </script>
+    <script>
+        mousection confirmRenYuan() {
+            $("#renyuanlist-container").hide();
+            var renyuan = "";
+            var renyuancode = "";
+            $("input[type='checkbox'][name='renyuan']").each(mousection () {
+                if ($(this).is(':checked')) {
+                    if (renyuan != "") {
+                        renyuan += ",";
+                        renyuancode += ",";
+                    }
+                    renyuan += $(this).data("label");
+                    renyuancode += $(this).val();
+
+                }
+            })
+
+            $("#renyuan").val(renyuan);
+            $("#renyuan").data("code", renyuancode);
+
+        }
+        mousection selectRenyuan(thisbutton) {
+            var keyword = $(thisbutton).val();
+            $("#renyuanlist li").find("input[type='checkbox']").each(mousection () {
+                if ($(this).data("label").indexOf(keyword) >= 0) {
+                    $(this).parent().show();
+                }
+                else {
+                    $(this).parent().hide();
+                }
+            })
+        }
+        mousection clearRenyuan() {
+            $("#renyuan").val("");
+            $("#renyuan").data("code", null);
+            $("#renyuanlist li").find("input[type='checkbox']").each(mousection () {
+                $(this).prop("checked", false);
+            })
+        }
+        mousection selectAllrenyuan(thisbutton) {
+            var isselect = $(thisbutton).prop("checked");
+            if (isselect) {
+                $("#renyuanlist li").find("input[type='checkbox']").each(mousection () {
+                    if ($(this).is(":visible")) {
+                        $(this).prop("checked", true);
+                    }
+                })
+            }
+            else {
+                $("#renyuanlist li").find("input[type='checkbox']").each(mousection () {
+                    if ($(this).is(":visible")) {
+                        $(this).prop("checked", false);
+                    }
+                })
+            }
+        }
+        mousection goLeft(thisbutton) {
+            $(thisbutton).parent().hide();
+            $(thisbutton).parent().prev().show();
+        }
+        mousection goRight(thisbutton) {
+            $(thisbutton).parent().hide();
+            $(thisbutton).parent().next().show();
+        }
+        mousection tabsSwitch(thisbutton) {
+            $(thisbutton).parent().find("li").removeClass("current");
+            $(thisbutton).addClass("current");
+            var type = $(thisbutton).data("linktype");
+            $(".content-box").hide();
+            $(".content-box." + type).show();
+        }
+
+        mousection CloseMesureTool() {
+            $("#measuretool-container").hide();
+            map.measuretool.hide();
+        }
+    </script>
+
+    <script>
+        Date.prototype.Format = mousection (fmt) {
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt))
+                fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o) {
+                if (new RegExp("(" + k + ")").test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
+        mousection GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+    </script>
+    <style>
+        #measuretool {
+            width: 200px;
+        }
+
+        #measuretool-container {
+            display: none;
+            width: 200px;
+        }
+
+        #renyuanlist-container {
+            position: absolute;
+            width: 240px;
+            height: 325px;
+            z-index: 1;
+            background: white;
+            display: none;
+            padding: 5px 10px;
+            background-color: rgba(171, 214, 255, 0.9);
+            margin-top: 2px;
+        }
+
+        #renyuanlist {
+            height: 230px;
+            overflow-y: auto;
+            padding-left: 5px;
+            padding-top: 0;
+        }
+
+            #renyuanlist li:hover {
+                background-color: rgba(81, 206, 255,0.6);
+            }
+
+        .close {
+            background: url(image/close.png) center no-repeat;
+            height: 20px;
+            width: 20px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .spcircle {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 12px;
+            border: 1px solid rgb(153, 153, 153);
+            background-color: rgb(255, 0, 0);
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 10px 0 10px 20px;
+        }
+
+        li {
+            padding: 2px;
+        }
+
+            li span {
+                font-size: 12px;
+                color: #4B6973;
+                letter-spacing: 0.05em;
+                position: relative;
+                top: -2px;
+            }
+
+        #layercon {
+            position: absolute;
+            right: 5px;
+            top: 100px;
+            border: solid 1px #a7a1a1;
+            border-radius: 2px;
+            background-color: #ffffff;
+        }
+
+        .taitou {
+            height: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 2px 5px;
+            border-radius: 2px 2px 0 0;
+            cursor: pointer;
+            background-color: #0695ea;
+            box-shadow: 0 0 5px rgba(12, 119, 183, 0.77);
+        }
+
+            .taitou:hover {
+                background-color: #029df9;
+            }
+
+        #page-wrap {
+            min-height: 320px;
+        }
+
+        #slot-machine-tabs {
+            height: 30px;
+        }
+
+            #slot-machine-tabs ul {
+                padding: 0;
+            }
+
+            #slot-machine-tabs .tabs li {
+                display: block;
+                float: left;
+                padding: 4px 30px;
+                color: black;
+                border: 1px solid #ccc;
+                background: #eee;
+                margin: 0 0 0 -1px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+                #slot-machine-tabs .tabs li.current {
+                    background: white;
+                    border-bottom: 0;
+                    position: relative;
+                    top: 2px;
+                    z-index: 2;
+                }
+
+        .box-wrapper {
+            position: relative;
+            top: 0;
+            left: -5px;
+            right: 0;
+            bottom: 0;
+            padding: 5px;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+
+            .box-wrapper > div:not(:first-child) {
+                display: none;
+            }
+
+        .content-box.image > div:not(:first-child) {
+            display: none;
+        }
+
+        .content-box.image > div:first-child > div.left {
+            display: none;
+        }
+
+        .content-box.image > div:last-child > div.right {
+            display: none;
+        }
+
+        .image .left {
+            width: 80px;
+            height: 240px;
+            background: url(image/left.png) no-repeat center;
+            background-color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            line-height: 280px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .image .left:hover {
+                background-color: rgba(0, 0, 0, 0.20);
+            }
+
+        .image .right {
+            width: 80px;
+            height: 240px;
+            background: url(image/right.png) no-repeat center;
+            background-color: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            line-height: 280px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+            .image .right:hover {
+                background-color: rgba(0, 0, 0, 0.20);
+            }
+
+        .picturemiss {
+            background: url(image/暂无图片.png) no-repeat center;
+        }
+
+        .table th {
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            background-color: #eee;
+        }
+
+        .table td {
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        #map {
+            position: fixed;
+            min-height: 800px;
+        }
+
+        #imgshower {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            background: rgba(99, 96, 96, 0.68);
+            display: none;
+            text-align: center;
+            vertical-align: middle;
+            top: 0;
+            padding: 10px;
+            overflow: auto;
+            z-index:100;
+        }
+         .picture {
+            cursor: pointer;
+        }
+    </style>
+    <style>
+        .loading {
+            left: 100px;
+            width: 200px;
+            height: 200px;
+            opacity: 1;
+            position: fixed;
+            border-radius: 10%;
+        }
+
+        .loadEffect {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 25% auto;
+        }
+
+            .loadEffect span {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: #000000;
+                position: absolute;
+                -webkit-animation: load 1.04s ease infinite;
+            }
+
+        @-webkit-keyframes load {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.2;
+            }
+        }
+
+        .loadEffect span:nth-child(1) {
+            left: 0;
+            top: 50%;
+            margin-top: -8px;
+            -webkit-animation-delay: 0.13s;
+        }
+
+        .loadEffect span:nth-child(2) {
+            left: 14px;
+            top: 14px;
+            -webkit-animation-delay: 0.26s;
+        }
+
+        .loadEffect span:nth-child(3) {
+            left: 50%;
+            top: 0;
+            margin-left: -8px;
+            -webkit-animation-delay: 0.39s;
+        }
+
+        .loadEffect span:nth-child(4) {
+            top: 14px;
+            right: 14px;
+            -webkit-animation-delay: 0.52s;
+        }
+
+        .loadEffect span:nth-child(5) {
+            right: 0;
+            top: 50%;
+            margin-top: -8px;
+            -webkit-animation-delay: 0.65s;
+        }
+
+        .loadEffect span:nth-child(6) {
+            right: 14px;
+            bottom: 14px;
+            -webkit-animation-delay: 0.78s;
+        }
+
+        .loadEffect span:nth-child(7) {
+            bottom: 0;
+            left: 50%;
+            margin-left: -8px;
+            -webkit-animation-delay: 0.91s;
+        }
+
+        .loadEffect span:nth-child(8) {
+            bottom: 14px;
+            left: 14px;
+            -webkit-animation-delay: 1.04s;
+        }
+    </style>
+</head>
+<body>
+    <!--<input type="button" value="测试" onclick="test()" style="position:fixed;top:100px;left:0;z-index:100;"/>-->
+    <div>
+        <table style="margin: 0 auto;">
+            <tr>
+                <td>巡查单位:</td>
+                <td colspan="3">
+                    <select id="danwei" onchange="getRenyuans()"></select>
+                </td>
+                <td>巡查人员:</td>
+                <td>
+                    <input type='text' id="renyuan" onclick="$('#renyuanlist-container').show();" readonly style="background-color:rgba(211, 211, 211, 0.5);" />
+                    <div id="renyuanlist-container">
+                        <div><span style="font-weight:bold;letter-spacing:0.05em;font-size:14px;">选择人员</span><div class="close" onclick="$('#renyuanlist-container').hide();"></div></div>
+                        <div style="background-color:white;    padding: 5px 0 0 5px;">
+                            <input type="text" onkeyup="selectRenyuan(this)" onchange="selectRenyuan(this)" style="width:75%;" />
+                            <input type="button" value="确定" onclick="confirmRenYuan()" />
+                            <div style="padding-top:5px;">
+                                <input type='checkbox' onclick='selectAllrenyuan(this)' /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;font-size: 12px;font-weight:bold;color: #4B6973;letter-spacing: 0.05em;">全选</span>
+                            </div>
+                            <ul id="renyuanlist"></ul>
+                        </div>
+                    </div>
+                </td>
+                <td><input type='button' value="清空" onclick="clearRenyuan()" /></td>
+            </tr>
+            <tr>
+                <td>开始日期:</td>
+                <td>
+                    <!--<input type="date" id="startdate" class="Wdate"/>-->
+                    <input type="text" id="startdate" class="form-control Wdate" onfocus="WdatePicker()" />
+                </td>
+                <td>结束日期:</td>
+                <td>
+                    <!--<input type="date" id="enddate" class="Wdate" />-->
+                    <input type="text" id="enddate" class="form-control Wdate" onfocus="WdatePicker()" />
+                </td>
+                <td>查询频率:</td>
+                <td>
+                    <select id="timeChooser">
+                        <option value="1">1分钟</option>
+                        <option value="2">2分钟</option>
+                        <option value="5" selected>5分钟</option>
+                        <option value="10">10分钟</option>
+                    </select>
+                    <select id="xchd">
+                        <option value="0">全天</option>
+                        <option value="1">上午</option>
+                        <option value="2">下午</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" style="text-align:center;">
+                    <input type="button" value="轨迹查询" onclick="guijiChaxun()" />
+                    <input type="button" value="事件查询" onclick="shijianChaxun()" />
+                    <input type="button" value="最新位置" onclick="zuixinWeizhi()" />
+                    <input type="button" value="轨迹回放" data-val="轨迹回放" disabled id="huifang_button" onclick="guijiPlayOrStop(this)" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="map"></div>
+    <div id="measuretool-container" style="position:absolute;top:200px;">
+        <div class="close" onclick="CloseMesureTool()"></div>
+        <div id='measuretool'>
+        </div>
+    </div>
+    <div id="layercon" style="">
+        <div class="taitou" onclick="$('#layercon-body').toggle()">图层控制</div>
+        <div style="padding:5px;" id="layercon-body">
+            <div>
+                <span style="font-weight: 700">切换底图</span>&nbsp;
+                <select id="ditu" onchange="switchBasemap()">
+                    <option value="0" class="waiwang">测绘院天地图</option>
+                    <option value="2,3" class="waiwang">测绘院遥感图</option>
+                    <option value="0" class="neiwang">测绘院本地地图</option>
+
+                </select>
+            </div>
+            <ul style="padding-left:0;">
+                <li><input type='checkbox' onclick="toggleHaianxian(this)" checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">海塘专用岸线</span></li>
+                <li><input type='checkbox' onclick='toggleGuiji(this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">轨迹</span></li>
+
+            </ul>
+            <ul style="border-top: 1px solid #ccc;padding-bottom: 0;">
+                <li style="position: relative;left: -20px;"><input type='checkbox' class='' onclick='toggleShijian("所有",this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">事件</span></li>
+                <li>
+                    <input type='checkbox' class='shijian' onclick='toggleShijian("发现",this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">发现</span>
+                    <span class="spcircle" style="background-color:rgb(153, 153, 153);"></span>
+                </li>
+                <li>
+                    <input type='checkbox' class='shijian' onclick='toggleShijian("立案", this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">立案</span>
+                    <span class="spcircle" style="background-color:rgb(255, 223, 70);"></span>
+                </li>
+                <li>
+                    <input type='checkbox' class='shijian' onclick='toggleShijian("派遣", this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">派遣</span>
+                    <span class="spcircle" style="background-color:rgb(230, 74, 14);"></span>
+                </li>
+                <li>
+                    <input type='checkbox' class='shijian' onclick='toggleShijian("处理", this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">处理</span>
+                    <span class="spcircle" style="background-color:rgb(0, 120, 193);"></span>
+                </li>
+                <li>
+                    <input type='checkbox' class='shijian' onclick='toggleShijian("结案", this)' checked /><span style="display: inline-block; position: relative; top: -2px;margin: 0 5px;">结案</span>
+                    <span class="spcircle" style="background-color:rgb(133, 228, 8);"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="loading" style="display:none" id="loading">
+        <div class="loadEffect">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div id="imgshower">
+        <div id="img-content">
+            <img id="imgcontent" />
+        </div>
+        <div class="cha" style="position:fixed;top:10px;right:10px;">
+            <img src="image/关闭.png" onclick="closeImg()" style="cursor:pointer;" />
+        </div>
+        <!--<div onclick="showOriginalImg()" style="color:white;border:1px solid white;border-radius:2px;position:fixed;bottom:5px;right:5px;">查看原图</div>-->
+    </div>
+</body>
+</html>
