@@ -1,10 +1,12 @@
-package com.mouse.ribbon.service.impl;
+package com.mouse.feign.service.impl;
 
-import com.mouse.ribbon.model.ProductOrder;
-import com.mouse.ribbon.service.OrderService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.mouse.feign.model.ProductOrder;
+import com.mouse.feign.service.ClientProductService;
+import com.mouse.feign.service.OrderService;
+import com.mouse.feign.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.Map;
@@ -21,12 +23,17 @@ import java.util.UUID;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    ClientProductService clientProductService;
 
     @Override
     public ProductOrder save(int userid, int id) {
 
-        Map<String,Object> map = restTemplate.getForObject("http://product-service/api/v1/product/find?id="+id, Map.class);
+        //Map<String,Object> map = restTemplate.getForObject("http://product-service/api/v1/product/find?id="+id, Map.class);
+
+        String data = clientProductService.find(id);
+
+        JsonNode jsonNode = JsonUtils.str2JsonNode(data);
+
 
 //        System.out.println(obj);
 
@@ -35,8 +42,8 @@ public class OrderServiceImpl implements OrderService {
         productOrder.setUserId(userid);
         productOrder.setCreateTime(new Date());
         productOrder.setOrderNo(UUID.randomUUID().toString());
-        productOrder.setProductName(map.get("name").toString());
-        productOrder.setPrice(Integer.valueOf(map.get("price").toString()));
+        productOrder.setProductName(jsonNode.get("name").toString());
+        productOrder.setPrice(Integer.valueOf(jsonNode.get("price").toString()));
         return productOrder;
     }
 }

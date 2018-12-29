@@ -11,3 +11,8 @@ eureka:
 spring:
   application:
     name: ribbon-service
+
+#自定义负载均衡
+product-service:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
