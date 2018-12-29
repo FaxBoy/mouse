@@ -88,7 +88,7 @@
 <!-- iCheck -->
 <script src="${PATH}/adminlte/plugins/iCheck/icheck.min.js"></script>
 <script>
-  $(function () {
+  $(mousection () {
     $('input').iCheck({
       checkboxClass: 'icheckbox_square-blue',
       radioClass: 'iradio_square-blue',

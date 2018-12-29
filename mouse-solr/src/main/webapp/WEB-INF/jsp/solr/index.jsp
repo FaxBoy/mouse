@@ -181,20 +181,20 @@ a:hover{color:#999;}
 <script type="text/javascript">
 
 //实现搜索输入框的输入提示js类
-function oSearchSuggest(searchFuc){
+mousection oSearchSuggest(searchFuc){
 	var input = $('#gover_search_key');
 	var suggestWrap = $('#gov_search_suggest');
 	var key = "";
-	var init = function(){
+	var init = mousection(){
 		input.bind('keyup',sendKeyWord);
-		input.bind('blur',function(){setTimeout(hideSuggest,100);})
+		input.bind('blur',mousection(){setTimeout(hideSuggest,100);})
 	}
-	var hideSuggest = function(){
+	var hideSuggest = mousection(){
 		suggestWrap.hide();
 	}
 	
 	//发送请求，根据关键字到后台查询
-	var sendKeyWord = function(event){
+	var sendKeyWord = mousection(event){
 		
 		//键盘选择下拉项
 		if(suggestWrap.css('display')=='block'&&event.keyCode == 38||event.keyCode == 40){
@@ -238,7 +238,7 @@ function oSearchSuggest(searchFuc){
 		
 	}
 	//请求返回后，执行数据展示
-	this.dataDisplay = function(data){
+	this.dataDisplay = mousection(data){
 		if(data.length<=0){
             suggestWrap.hide();
 			return;
@@ -257,13 +257,13 @@ function oSearchSuggest(searchFuc){
 		suggestWrap.show();
 		
 		//为下拉选项绑定鼠标事件
-		suggestWrap.find('li').hover(function(){
+		suggestWrap.find('li').hover(mousection(){
 				suggestWrap.find('li').removeClass('hover');
 				$(this).addClass('hover');
 		
-			},function(){
+			},mousection(){
 				$(this).removeClass('hover');
-		}).bind('click',function(){
+		}).bind('click',mousection(){
 			input.val(this.innerHTML);
 			suggestWrap.hide();
 		});
@@ -276,7 +276,7 @@ var searchSuggest =  new oSearchSuggest(sendKeyWordToBack);
 
 //这是一个模似函数，实现向后台发送ajax查询请求，并返回一个查询结果数据，传递给前台的JS,再由前台JS来展示数据。本函数由程序员进行修改实现查询的请求
 //参数为一个字符串，是搜索输入框中当前的内容
-function sendKeyWordToBack(keyword){
+mousection sendKeyWordToBack(keyword){
 	   var obj = {
 			    "keyWord" : keyword
 			 };
@@ -286,10 +286,10 @@ function sendKeyWordToBack(keyword){
 					   async:false,
 					   data: obj,
 					   dataType: "json",
-					   success: function(data){
+					   success: mousection(data){
 						  var key = data.data;
 						  var aData = [];
-						  $.each(key, function(i) {
+						  $.each(key, mousection(i) {
 							  if(key[i].code!=undefined){
 							  	aData.push(key[i].code);
 							  }
@@ -300,7 +300,7 @@ function sendKeyWordToBack(keyword){
 		 });	 
 }
 var startpage=0;
-$(".search_btn").on('click', function(){
+$(".search_btn").on('click', mousection(){
 	$("#wrap").html("");
 	var keyword=$("#gover_search_key").val();
 	startpage=0;
@@ -314,7 +314,7 @@ $(".search_btn").on('click', function(){
 		   async:false,
 		   data: obj,
 		   dataType: "json",
-		   success: function(data){
+		   success: mousection(data){
 			  var key = data.data.data;
 			  var aData = [];
 			  dataDisplay(key);
