@@ -24,7 +24,7 @@ public class MainConfig
 {
     public static void main(String[] args)
     {
-        disableSslVerification();
+        //disableSslVerification();
         SpringApplication.run(MainConfig.class, args);
     }
 

@@ -28,5 +28,18 @@ public class ConnectionWatcher implements Watcher{
     public void close() throws InterruptedException{
         zk.close();
     }
+    
+    public static void main(String[] args) {
+		int minVersion = 10;
+		int maxVersion = 20;
+		int nowVersion = 13;
+		if(nowVersion<minVersion) {
+			System.out.println("必须更新");
+		}else if(nowVersion>=minVersion&&nowVersion<maxVersion) {
+			System.out.println("提示更新，但非强制");
+		}else {
+			System.out.println("无需更新");
+		}
+	}
 
 }

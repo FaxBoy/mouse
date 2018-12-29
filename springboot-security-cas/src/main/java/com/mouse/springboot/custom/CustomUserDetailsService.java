@@ -1,8 +1,10 @@
 package com.mouse.springboot.custom;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,11 @@ public class CustomUserDetailsService
     @Override
     public UserDetails loadUserDetails(CasAssertionAuthenticationToken token) throws UsernameNotFoundException
     {
+
+        CasAssertionAuthenticationToken casAssertionAuthenticationToken = (CasAssertionAuthenticationToken) token;
+        AttributePrincipal principal = casAssertionAuthenticationToken.getAssertion().getPrincipal();
+        Map attributes = principal.getAttributes();
+
         System.out.println("当前的用户名是：" + token.getName());
         /* 这里我为了方便，就直接返回一个用户信息，实际当中这里修改为查询数据库或者调用服务什么的来获取用户信息 */
         com.mouse.springboot.custom.UserInfo userInfo = new com.mouse.springboot.custom.UserInfo();
