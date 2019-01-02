@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * @author shil <sl166199@163.com>
  * @version v1.0
- * @ClassName OrderServiceImpl
+ * @ClassName OrderServiceImpl 订单
  * @Description TODO
  * @date 2018/9/14 11:02
  */
@@ -30,7 +30,10 @@ public class OrderServiceImpl implements OrderService {
 
         //Map<String,Object> map = restTemplate.getForObject("http://product-service/api/v1/product/find?id="+id, Map.class);
 
+        //商品服务
         String data = clientProductService.find(id);
+
+        //用户服务
 
         JsonNode jsonNode = JsonUtils.str2JsonNode(data);
 
