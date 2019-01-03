@@ -24,3 +24,12 @@ feign:
       default:
         connectTimeout: 2000
         readTimeout: 2000
+
+#debug日志级别
+logging:
+  level:
+    com:
+      mouse:
+        feign:
+          service:
+            ClientProductService: debug
