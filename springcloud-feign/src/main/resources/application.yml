@@ -40,3 +40,12 @@ logging:
         feign:
           service:
             ClientProductService: debug
+
+#hystrix超时 策略
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
