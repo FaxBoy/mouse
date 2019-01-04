@@ -11,6 +11,11 @@ eureka:
 spring:
   application:
     name: feign-service
+  redis:
+    database: 0
+    host: 10.37.129.3
+    port: 6379
+    timeout: 2000
 
 #自定义负载均衡
 product-service:
@@ -24,6 +29,8 @@ feign:
       default:
         connectTimeout: 2000
         readTimeout: 2000
+  hystrix:
+    enabled: true
 
 #debug日志级别
 logging:
