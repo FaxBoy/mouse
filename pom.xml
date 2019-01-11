@@ -33,5 +33,6 @@
 		<module>springboot-shiro</module>
 		<module>springcloud-eureka-server</module>
 		<module>springcloud-product-service</module>
+		<module>springcloud-gateway</module>
 	</modules>
 </project>
