@@ -20,4 +20,6 @@ zuul:
   #过滤路径
   ignored-patterns: /*-service/**
   #过滤服务
-#  ignored-services: product-service
+  #ignored-services: product-service
+  #不过滤请求头
+  sensitive-headers:
