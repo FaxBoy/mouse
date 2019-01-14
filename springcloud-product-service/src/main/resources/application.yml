@@ -11,3 +11,5 @@ eureka:
 spring:
   application:
     name: product-service
+
+#jdbc
