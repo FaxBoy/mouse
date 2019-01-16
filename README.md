@@ -2,4 +2,4 @@
 **jdk：`1.8`**
 **IDE：`IDEA`**
 
-<img src="https://netflix.github.com/Hystrix/images/hystrix-logo-tagline-850.png">
+<img src="https://github.com/FaxBoy/mouse/blob/master/springcloud-feign/src/main/resources/static/images/framework.jpeg">
