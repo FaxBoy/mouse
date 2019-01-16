@@ -47,3 +47,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+mouse.iml
