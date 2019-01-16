@@ -35,6 +35,7 @@ Thumbs.db
 *.iws
 *.iml
 *.ipr
+*.xml
 .idea/
 overlays
 bin
