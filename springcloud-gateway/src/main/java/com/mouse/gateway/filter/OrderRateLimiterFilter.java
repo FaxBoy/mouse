@@ -20,7 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class OrderRateLimiterFilter extends ZuulFilter {
 
-    private final static RateLimiter RATE_LIMITER = RateLimiter.create(2);
+    private final  static int maxRateLimiter = 2;
+
+    /**
+     * @Description TODO(限流大小)
+     * @author shil <sl166199@163.com>
+     * @date 2019/1/16 15:26
+     */
+    private final static RateLimiter RATE_LIMITER = RateLimiter.create(maxRateLimiter);
 
     @Override
     public String filterType() {
@@ -50,6 +57,7 @@ public class OrderRateLimiterFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         RequestContext requestContext = RequestContext.getCurrentContext();
         if(!RATE_LIMITER.tryAcquire()){
+            System.out.println("请求并发数大于:"+maxRateLimiter);
             requestContext.setSendZuulResponse(false);
             requestContext.setResponseStatusCode(HttpStatus.TOO_MANY_REQUESTS.value());
         }

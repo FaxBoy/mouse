@@ -2,6 +2,8 @@ package com.mouse.productservice.service.impl;
 
 import com.mouse.productservice.model.Product;
 import com.mouse.productservice.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,6 +17,8 @@ import java.util.*;
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final Map<Integer,Product> prodouctMap = new HashMap<>();
 
@@ -50,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findById(int id) {
+        logger.info("ProductServiceImpl findById");
         return prodouctMap.get(id);
     }
 }

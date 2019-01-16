@@ -39,7 +39,7 @@ public class OrderController {
     public Object save(@RequestParam("user_id") int userId, @RequestParam("product_id") int productId, HttpServletRequest request){
 
         String token = request.getHeader("token");
-        System.out.println(token);
+        System.out.println("token: "+token);
 
 
         Map result = new HashMap();

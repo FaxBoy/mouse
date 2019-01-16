@@ -5,6 +5,8 @@ import com.mouse.feign.model.ProductOrder;
 import com.mouse.feign.service.ClientProductService;
 import com.mouse.feign.service.OrderService;
 import com.mouse.feign.utils.JsonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ import java.util.UUID;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     ClientProductService clientProductService;
@@ -39,6 +43,8 @@ public class OrderServiceImpl implements OrderService {
 
 
 //        System.out.println(obj);
+
+        logger.info("OrderServiceImpl save");
 
         ProductOrder productOrder = new ProductOrder();
         productOrder.setId(id);

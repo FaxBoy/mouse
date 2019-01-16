@@ -16,6 +16,13 @@ spring:
     host: 10.37.129.3
     port: 6379
     timeout: 2000
+  #zipkin 服务地址
+  zipkin:
+    base-url: http://localhost:9411/
+  #zipkin 采样百分比 开发时可设置为1（百分百）
+  sleuth:
+    sampler:
+      probability: 1
 
 #自定义负载均衡
 product-service:
