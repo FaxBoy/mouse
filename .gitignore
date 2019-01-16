@@ -35,10 +35,11 @@ Thumbs.db
 *.iws
 *.iml
 *.ipr
-*.xml
 .idea/
 overlays
 bin
+
+.idea/kotlinc.xml
 
 
 ### NetBeans ###
@@ -48,4 +49,3 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-mouse.iml
