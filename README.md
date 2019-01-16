@@ -1,5 +1,5 @@
 # mouse
-**jdk：`1.8`**
+**jdk：`1.8`**  
 **IDE：`IDEA`**  
 **spring-cloud.version：`Greenwich.RC2`**  
 
