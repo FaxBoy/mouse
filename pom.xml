@@ -35,5 +35,7 @@
 		<module>springcloud-product-service</module>
 		<module>springcloud-gateway</module>
 		<module>springcloud-config-server</module>
+		<module>springcloud-feign</module>
+		<module>springcloud-ribbon</module>
 	</modules>
 </project>
