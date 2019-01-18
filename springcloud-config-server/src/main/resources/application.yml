@@ -7,7 +7,7 @@ spring:
         git:
           uri: https://github.com/FaxBoy/config-cloud
           username: sl166199@163.com
-          password: 19940923abc
+          password:
           timeout: 5
           default-label: master
 
