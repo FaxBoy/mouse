@@ -34,5 +34,7 @@
 		<module>springcloud-eureka-server</module>
 		<module>springcloud-product-service</module>
 		<module>springcloud-gateway</module>
+		<module>springcloud-feign</module>
+		<module>springcloud-ribbon</module>
 	</modules>
 </project>
