@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.1.1.RELEASE</version>
+		<version>2.1.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mouse</groupId>
-	<artifactId>product-service</artifactId>
+	<artifactId>springcloud-config-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>product-service</name>
+	<name>springcloud-config-server</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -21,8 +21,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -34,30 +34,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-sleuth</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>druid</artifactId>
-			<version>1.1.12</version>
-		</dependency>
-
-		<dependency>
-			<groupId>releases.wavenet.com</groupId>
-			<artifactId>gbase-ojdbc8</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-
-		<!--配置中心客户端-->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-config-client</artifactId>
-		</dependency>
-
 	</dependencies>
 
 	<dependencyManagement>
@@ -86,11 +62,6 @@
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
-		</repository>
-		<repository>
-			<id>maven-release</id>
-			<name>maven releases</name>
-			<url>http://172.18.0.25:8081/repository/maven-releases/</url>
 		</repository>
 	</repositories>
 
