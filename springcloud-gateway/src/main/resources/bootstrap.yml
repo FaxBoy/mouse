@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: zuul-gateway
+  #指定从哪个配置中心读取
+  cloud:
+    config:
+      discovery:
+        service-id: CONFIG-SERVER
+        enabled: true
