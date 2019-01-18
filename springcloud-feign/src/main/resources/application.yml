@@ -23,6 +23,17 @@ spring:
   sleuth:
     sampler:
       probability: 1
+  #配置freemaker
+  #默认加载类路径下 templates文件夹下的页面
+  freemarker:
+    cache: true
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+    suffix: .html
 
 #自定义负载均衡
 product-service:
