@@ -58,6 +58,18 @@
 			<artifactId>spring-cloud-config-client</artifactId>
 		</dependency>
 
+		<!--bus消息总线 动态刷新配置-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.boot</groupId>-->
+			<!--<artifactId>spring-boot-starter-actuator</artifactId>-->
+		<!--</dependency>-->
+
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.cloud</groupId>-->
+			<!--<artifactId>spring-cloud-starter-bus-amqp</artifactId>-->
+		<!--</dependency>-->
+
+
 	</dependencies>
 
 	<dependencyManagement>
