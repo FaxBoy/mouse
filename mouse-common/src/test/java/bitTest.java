@@ -1,4 +1,10 @@
-
+/**
+ * @author shil <sl166199@163.com>
+ * @version v1.0
+ * @ClassName bitTest
+ * @Description TODO 求一类似于【2,2,1,3,3】这样的数据只出现一次的数据，输出1
+ * @date 2018/9/14 11:02
+ */
 public class bitTest {
 
     public static void main(String[] args) {
