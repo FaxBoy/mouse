@@ -47,4 +47,13 @@ public class Person {
 	public void setComp(Comp comp) {
 		this.comp = comp;
 	}
+
+	@Override
+	public String toString() {
+		return "Person{" +
+				"personId=" + personId +
+				", personName='" + personName + '\'' +
+				", comp=" + comp +
+				'}';
+	}
 }

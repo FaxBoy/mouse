@@ -1,0 +1,11 @@
+##################  所有profile共有的配置  #################
+
+
+###################  swagger配置  ###################
+wavenet:
+  swagger-open: true #是否开启swagger (true/false)
+
+###################  spring配置  ###################
+spring:
+  profiles:
+    active: dev

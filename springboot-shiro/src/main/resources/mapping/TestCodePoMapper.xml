@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mouse.springbootshiro.mapper.TestCodeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mouse.springbootshiro.dao.TestCodePo">
+        <id column="id" property="id" />
+        <result column="userid" property="userid" />
+        <result column="subject_name" property="subjectName" />
+        <result column="deleted" property="deleted" />
+        <result column="update_time" property="updateTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+</mapper>

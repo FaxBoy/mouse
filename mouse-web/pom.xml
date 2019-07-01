@@ -299,10 +299,10 @@
 
 
 		<dependency>
-			<groupId>com.mouse</groupId>
-			<artifactId>mouse-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<groupId>com.mouse</groupId>
+		<artifactId>mouse-common</artifactId>
+		<version>${project.version}</version>
+	</dependency>
 		<dependency>
 			<groupId>com.mouse</groupId>
 			<artifactId>mouse-model</artifactId>

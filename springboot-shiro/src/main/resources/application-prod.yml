@@ -1,0 +1,40 @@
+###################  开发环境的profile  ###################
+server:
+  port: 8082 #程序端口
+
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://172.18.0.73:3306/only?useSSL=false
+    username: root
+    password: 1QAZ@wsx
+
+logging:
+  level.root: info
+  level.com.wavenet: info
+  path: logs/mouse/
+  file: springboot.log
+
+mybatis-plus:
+  mapper-locations: classpath:mapping/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.mouse.springbootshiro.dao
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: AUTO
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: ignored
+      #驼峰下划线转换
+      db-column-underline: true
+      #刷新mapper 调试神器
+      refresh-mapper: false
+    # 原生配置
+    configuration:
+      map-underscore-to-camel-case: true
+      cache-enabled: false #配置的缓存的全局开关
+      lazyLoadingEnabled: false #延时加载的开关
+      multipleResultSetsEnabled: false #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+
+

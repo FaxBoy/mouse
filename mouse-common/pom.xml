@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.mouse</groupId>
 		<artifactId>mouse</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<packaging>jar</packaging>
@@ -16,6 +16,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.jwt.version>2.2.0</java.jwt.version>
+		<xstream.version>1.4.11.1</xstream.version>
+		<java.version>1.8</java.version>
 	</properties>
 
 	<url>http://maven.apache.org</url>
@@ -25,5 +27,26 @@
 			<artifactId>java-jwt</artifactId>
 			<version>${java.jwt.version}</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>${xstream.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.32</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+
+
 	</dependencies>
 </project>
