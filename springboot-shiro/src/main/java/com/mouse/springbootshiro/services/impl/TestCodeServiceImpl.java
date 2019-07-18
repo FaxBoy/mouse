@@ -6,8 +6,10 @@ import com.mouse.springbootshiro.services.ITestCodeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,18 +29,33 @@ public class TestCodeServiceImpl extends ServiceImpl<TestCodeMapper, TestCodePo>
     TestCodeMapper testCodeMapper;
 
     @Override
+    @Transactional
     public void saveTestCode(TestCodePo testCodePo) throws Exception {
+
+
+
+
+//        testCodeMapper.updateById(testCodePo);
+
+        this.updateTestCode(testCodePo);
+//        ((ITestCodeService) AopContext.currentProxy()).updateTestCode(testCodePo);
+
+//        try {
+//            testCodeMapper.updateById(testCodePo);
+//        }catch(Exception e){
+//            logger.error(e.getMessage());
+//            throw new RuntimeException("更新失败");
+//        }
+        testCodePo.setSubjectName("水立方撒谎奋可怜的发生率克己复礼客机失联的看法可怜是大解放路口");
+        testCodeMapper.updateById(testCodePo);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateTestCode(TestCodePo testCodePo){
         testCodeMapper.insert(testCodePo);
-
-        testCodePo.setVersion(1);
-        testCodePo.setSubjectName("水立方撒谎奋斗啦水立方哈佛挥洒浪费哈舒服阿双方拉升");
-
-        try {
-            testCodeMapper.updateById(testCodePo);
-        }catch(Exception e){
-            logger.error(e.getMessage());
-            throw new RuntimeException("更新失败");
-        }
+        testCodePo.setSubjectName("水立方撒");
+        testCodeMapper.updateById(testCodePo);
 
     }
 }

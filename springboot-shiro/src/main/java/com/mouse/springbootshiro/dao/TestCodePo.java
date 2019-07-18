@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -36,6 +38,7 @@ public class TestCodePo extends Model<TestCodePo> {
     @ApiModelProperty(value="删除状态",name="deleted",required=true)
     private Integer deleted;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("update_time")
     private LocalDateTime updateTime;
 

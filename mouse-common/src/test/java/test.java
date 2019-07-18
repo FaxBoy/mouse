@@ -23,19 +23,19 @@ public class test {
 
     public static void main(String[] args) {
 
-//        for (int i = 0; i < 3; i++) {
-//            System.out.println(i);
-//            for (int j = 0; j < 10; j++) {
-//                if(j==5){
-//                    return;
-//                }
-//                System.out.println(j);
-//            }
-//        }
-        test t = null;
-        t.setName(t.getName());
-
-        System.out.println(!false);
+        for (int i = 0; i < 3; i++) {
+            System.out.println(i);
+            for (int j = 0; j < 10; j++) {
+                if(j==5){
+                    return;
+                }
+                System.out.println(j);
+            }
+        }
+//        test t = null;
+//        t.setName(t.getName());
+//
+//        System.out.println(!false);
 
 
     }

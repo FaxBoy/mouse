@@ -1,5 +1,8 @@
 package com.mouse.springbootshiro.util;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
@@ -11,6 +14,7 @@ import java.io.Serializable;
 * 
 * @param <T>
  */
+@ApiModel(value="ResultVO对象", description="")
 public class ResultVO<T> implements Serializable {
 
 	/** 
@@ -20,8 +24,13 @@ public class ResultVO<T> implements Serializable {
 
 	private static final int SUCCESS_CODE = 200;
 
+	@ApiModelProperty(value = "状态码")
 	private Integer code;
+
+	@ApiModelProperty(value = "提示信息")
 	private String message;
+
+	@ApiModelProperty(value = "内容body")
 	private T data;
 
 	public ResultVO() {

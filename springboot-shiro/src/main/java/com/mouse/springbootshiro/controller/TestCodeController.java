@@ -1,6 +1,8 @@
 package com.mouse.springbootshiro.controller;
 
 
+import cn.hutool.Hutool;
+import cn.hutool.core.date.DateUtil;
 import com.mouse.springbootshiro.dao.TestCodePo;
 import com.mouse.springbootshiro.mapper.TestCodeMapper;
 import com.mouse.springbootshiro.services.ITestCodeService;
@@ -35,7 +37,7 @@ public class TestCodeController {
     @ApiOperation("简单测试")
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String test() {
-        return "hello world";
+        return " 😄 hello world！ 当前时间："+ DateUtil.now();
     }
 
     @ApiOperation("查询集合")

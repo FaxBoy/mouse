@@ -2,6 +2,7 @@ package com.mouse.springbootshiro.services;
 
 import com.mouse.springbootshiro.dao.TestCodePo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -14,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface ITestCodeService extends IService<TestCodePo> {
 
-    @Transactional
+
     void saveTestCode(TestCodePo testCodePo) throws Exception;
+
+//    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    void updateTestCode(TestCodePo testCodePo);
 
 }

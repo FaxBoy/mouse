@@ -5,14 +5,16 @@ server:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://10.211.55.6:3306/test?useSSL=false
+    url: jdbc:mysql://192.168.72.34:3306/mouse?useSSL=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     username: root
     password: root
+  aop:
+    proxy-target-class: true
 
 logging:
   level.root: info
   level.com.wavenet: debug
-  path: logs/mouse/
+  path: /logs/mouse/
   file: springboot.log
 
 mybatis-plus:
