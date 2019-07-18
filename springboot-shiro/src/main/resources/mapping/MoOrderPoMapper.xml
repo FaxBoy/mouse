@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mouse.springbootshiro.mapper.MoOrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mouse.springbootshiro.dao.MoOrderPo">
+        <id column="uuid" property="uuid" />
+        <result column="user_id" property="userId" />
+        <result column="order_no" property="orderNo" />
+        <result column="amount" property="amount" />
+        <result column="type_cd" property="typeCd" />
+        <result column="status_cd" property="statusCd" />
+        <result column="payment_type_cd" property="paymentTypeCd" />
+        <result column="complete_time" property="completeTime" />
+        <result column="regist_date" property="registDate" />
+        <result column="remark" property="remark" />
+        <result column="update_time" property="updateTime" />
+        <result column="version" property="version" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>
