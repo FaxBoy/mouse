@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.mouse.springbootshiro.util.UUIDUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -54,12 +55,14 @@ public class MyThread extends Thread{
         String [] items3 = new String[]{"3001","3002","3003","3004","3005","3006","3007","3008","3009","3000"};
         String [] itemsCity = new String[]{"北京","上海","广州","山西","东北","湖北","湖南","吉林","河北","安徽"};
         String [] oredrPrefix = new String[]{"JD","TB","PDD","VIP","SN","TM"};
+        int [] deletedItems = new int[]{0,1};
         // 开始时间
         Long begin = new Date().getTime();
         // sql前缀
         //String prefix = "INSERT INTO teacher (uuid,name,password,sex,tel,description,pic_url,school_name,regist_date) VALUES ";
-        String prefix = "INSERT INTO mo_order (uuid,user_id,order_no,amount,type_cd,status_cd,payment_type_cd,regist_date) VALUES ";
+//        String prefix = "INSERT INTO mo_order (uuid,user_id,order_no,amount,type_cd,status_cd,payment_type_cd,regist_date,deleted) VALUES ";
 //        String prefix = "INSERT INTO mo_user (uuid,user_id,user_name,city,regist_date) VALUES ";
+        String prefix = "INSERT INTO mo_gps (uuid,user_id,lng,lat,mutex,regist_date) VALUES ";
         try {
             // 保存sql后缀
             StringBuffer suffix = new StringBuffer();
@@ -79,15 +82,26 @@ public class MyThread extends Thread{
                     int b= (int) Math.floor(Math.random()*items2.length);
                     int c= (int) Math.floor(Math.random()*items3.length);
                     int d= (int) Math.floor(Math.random()*oredrPrefix.length);
+                    int e= (int) Math.floor(Math.random()*deletedItems.length);
                     String type1 = items1[a];
                     String type2 = items2[b];
                     String type3 = items3[c];
+                    int deleted = deletedItems[e];
                     String orderNo = oredrPrefix[d]+String.valueOf(System.currentTimeMillis());
 //                    int d= (int) Math.floor(Math.random()*itemsCity.length);
 //                    String city = itemsCity[d];
 //                    suffix.append("('" + IdUtil.simpleUUID()+"','"+getRandomName()+"'"+ ",'123456',0,'13898644689','教师','www.image.com','Java大学','2019-03-11 10:12:26'),");
-                    suffix.append("('" + IdUtil.simpleUUID()+"','"+getTel()+"','"+orderNo+"','"+String.valueOf(100*Math.random())+"','"+type1+"','"+type2+"','"+type3+"','"+ DateUtil.now()+"'),");
+                   // suffix.append("('" + IdUtil.simpleUUID()+"','"+getTel()+"','"+orderNo+"','"+String.valueOf(100*Math.random())+"','"+type1+"','"+type2+"','"+type3+"','"+ DateUtil.now()+"',"+deleted+"),");
 //                    suffix.append("('" + IdUtil.simpleUUID()+"','"+getTel()+"','"+getRandomName()+"','"+city+"','"+ DateUtil.now()+"'),");
+                    String lat = randomLonLat(120.52,122.12,30.40,31.53,"lat");
+                    String lng = randomLonLat(120.52,122.12,30.40,31.53,"Lon");
+
+//                    东经108°21′42″—116°07′50″、北纬29°01′53″—33°6′47″
+//
+//                    String lat = randomLonLat(108.21,116.07,29.01,33.6,"lat");
+//                    String lng = randomLonLat(108.21,116.07,29.01,33.6,"Lon");
+
+                    suffix.append("('" + IdUtil.simpleUUID()+"','"+getTel()+"','"+lng+"','"+lat+"','"+(int) Math.floor(Math.random()*100)+"','"+ DateUtil.now()+"'),");
                 }
                 // 构建完整SQL
                 String sql = prefix + suffix.substring(0, suffix.length() - 1);
@@ -111,6 +125,20 @@ public class MyThread extends Thread{
         // 耗时
         System.out.println("100万条数据插入花费时间 : " + (end - begin) / 1000 + " s"+"  插入完成");
     }
+
+    public static String randomLonLat(double MinLon, double MaxLon, double MinLat, double MaxLat, String type) {
+        Random random = new Random();
+        BigDecimal db = new BigDecimal(Math.random() * (MaxLon - MinLon) + MinLon);
+        String lon = db.setScale(6, BigDecimal.ROUND_HALF_UP).toString();// 小数后6位
+        db = new BigDecimal(Math.random() * (MaxLat - MinLat) + MinLat);
+        String lat = db.setScale(6, BigDecimal.ROUND_HALF_UP).toString();
+        if (type.equals("Lon")) {
+            return lon;
+        } else {
+            return lat;
+        }
+    }
+
 
     public static String getRandomName(){
         Random random=new Random(System.currentTimeMillis());

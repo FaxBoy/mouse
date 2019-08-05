@@ -10,6 +10,12 @@ spring:
     password: root
   aop:
     proxy-target-class: true
+  elasticsearch:
+    rest:
+      uris: ["10.211.55.4:9200","10.211.55.5:9200"]
+
+#elasticsearch:
+#  ip: 10.211.55.4:9200,10.211.55.5:9200
 
 logging:
   level.root: info
@@ -39,5 +45,3 @@ mybatis-plus:
       lazyLoadingEnabled: false #延时加载的开关
       multipleResultSetsEnabled: false #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
-
-
