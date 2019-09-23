@@ -1,18 +1,23 @@
-###################  开发环境的profile  ###################
+###################  生产环境的profile  ###################
 server:
-  port: 8082 #程序端口
+  port: 8081 #程序端口
 
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://172.18.0.73:3306/only?useSSL=false
+    url: jdbc:mysql://172.16.39.240:3506/mouse?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: 1QAZ@wsx
+    password: wk.DFPuXp87N
+  aop:
+    proxy-target-class: true
+  elasticsearch:
+    rest:
+      uris: ["10.211.55.4:9200","10.211.55.5:9200"]
 
 logging:
   level.root: info
-  level.com.wavenet: info
-  path: logs/mouse/
+  level.com.wavenet: debug
+  path: /logs/mouse/
   file: springboot.log
 
 mybatis-plus:
@@ -29,12 +34,17 @@ mybatis-plus:
       #驼峰下划线转换
       db-column-underline: true
       #刷新mapper 调试神器
-      refresh-mapper: false
+      refresh-mapper: true
     # 原生配置
     configuration:
       map-underscore-to-camel-case: true
       cache-enabled: false #配置的缓存的全局开关
       lazyLoadingEnabled: false #延时加载的开关
       multipleResultSetsEnabled: false #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+#      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
 
-
+feigou:
+  host: http://39.98.47.121:9091
+  devsecretkey: 8D5183F3655F6CDA2F6D9AE4F8BF0902
+  userid: 20190909
+  passWord: sl121033762

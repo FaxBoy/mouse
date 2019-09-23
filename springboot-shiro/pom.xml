@@ -54,6 +54,16 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
@@ -121,25 +131,31 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.elasticsearch</groupId>-->
-            <!--<artifactId>elasticsearch</artifactId>-->
-            <!--<version>7.2.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.5</version>
+        </dependency>
 
-        <!--&lt;!&ndash; Java Low Level REST Client &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.elasticsearch.client</groupId>-->
-            <!--<artifactId>elasticsearch-rest-client</artifactId>-->
-            <!--<version>7.2.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+        </dependency>
 
-        <!--&lt;!&ndash; Java High Level REST Client &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.elasticsearch.client</groupId>-->
-            <!--<artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-            <!--<version>7.2.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+
 
 
         <dependency>

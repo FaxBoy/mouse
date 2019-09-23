@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mouse.springbootshiro.mapper.MoXbbUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mouse.springbootshiro.dao.MoXbbUserPo">
+        <id column="id" property="id" />
+        <result column="user_id" property="userId" />
+        <result column="uuid" property="uuid" />
+        <result column="pass_word" property="passWord" />
+        <result column="phone" property="phone" />
+        <result column="cdkey" property="cdkey" />
+        <result column="remarks" property="remarks" />
+        <result column="status_cd" property="statusCd" />
+        <result column="owner_id" property="ownerId" />
+        <result column="cz_time" property="czTime" />
+        <result column="bas_time" property="basTime" />
+        <result column="platform" property="platform" />
+        <result column="yzm_total" property="yzmTotal" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="field1" property="field1" />
+        <result column="field2" property="field2" />
+        <result column="info" property="info" />
+    </resultMap>
+
+    <select id="selectListByDao" parameterType="com.mouse.springbootshiro.dao.MoXbbUserPo" resultMap="BaseResultMap">
+      select * from mo_xbb_user x
+        WHERE 1 = 1
+        <if test="phone != null and phone != ''">
+            AND x.phone = #{phone,jdbcType=VARCHAR}
+        </if>
+          AND x.owner_id = #{ownerId,jdbcType=VARCHAR}
+          AND x.status_cd = #{statusCd}
+        order by id
+    </select>
+
+    <select id="selectPageVo" resultMap="BaseResultMap" parameterType="com.mouse.springbootshiro.dao.MoXbbUserPo" >
+        select * from mo_xbb_user x
+        <where>
+          ${ew.sqlSegment}
+        </where>
+
+    </select>
+
+    <select id="getByUuid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from mo_xbb_user x where uuid = #{uuid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getByOwnerId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select * from mo_xbb_user x where owner_id = #{ownerId,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

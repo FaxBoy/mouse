@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Console</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!--<link rel="stylesheet" href="https://heerey525.github.io/layui-v2.4.3/layui-v2.4.5/css/layui.css"  media="all">-->
+    <link rel="stylesheet" href="/layui-v2.5.4/layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<blockquote class="layui-elem-quote layui-text">
+    状态值：<a href="javacript:void(0);">0:白号；1:已卖出；2:可售；3:白号-绑卡；-1:异常号</a>
+    <p><a href="javacript:void(0);"><span id="add">数据导入</span></a></p>
+</blockquote>
+<div class="demoTable">
+    KEY：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="key" autocomplete="off">
+    </div>
+    状态：
+    <div class="layui-inline">
+        <input class="layui-input" name="statusCd" id="statusCd" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+<table class="layui-hide" id="test" lay-filter="test3"></table>
+
+<script src="/layui-v2.5.4/layui/layui.js" charset="utf-8"></script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script type="text/html" id="barDemo" th:inline="none">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">指定</a>
+    <a class="layui-btn layui-btn-xs" id="" lay-event="edit">取码</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">明细</a>
+</script>
+
+<script type="text/javascript" th:inline="none">
+
+    function submit() {
+        // layer.closeAll();
+
+        var content = $("#content").val();
+        var key = $('#key').val();
+        $.ajax({
+            type:"POST",
+            url: "/moXbbUserPo/create",
+            dataType: "json", //表示返回值类型，不必须
+            data: {'content': content, 'ownerId': key},
+            success: function (jsonResult) {
+                layer.msg(jsonResult.message);
+            },
+            error: function (data){
+                layer.msg("请求失败");
+            }
+        });
+
+        console.info(content);
+    }
+
+    function Funsjhtml(obj) {
+        console.info(obj);
+        var html = "<ul class=\"layui-timeline\">\n";
+        for(var i in obj){
+            console.info(obj[i]);
+
+            html +="  <li class=\"layui-timeline-item\">\n" +
+                "    <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
+                "    <div class=\"layui-timeline-content layui-text\">\n" +
+                "      <div class=\"layui-timeline-title\">"+obj[i].time+"，"+obj[i].info+"</div>\n" +
+                "    </div>\n" +
+                "  </li>\n";
+
+        }
+        html += "</ul>";
+
+        return html;
+
+    }
+
+    var html ="" +
+        "<div class=\"layui-form-item layui-form-text\">\n" +
+        "    <label class=\"layui-form-label\">手机号-用户名</label>\n" +
+        "    <div class=\"layui-input-block\">\n" +
+        "      <textarea placeholder=\"多组号以逗号隔开，如：13423322332-ls1232142,15544443333-te6666\" id='content' class=\"layui-textarea\"></textarea>\n" +
+        "    </div>\n" +
+        "  </div>" +
+        "<div class=\"layui-form-item\">\n" +
+        "    <div class=\"layui-input-block\">\n" +
+        "      <button class=\"layui-btn\" onclick='submit()'>立即提交</button>\n" +
+        "      <button type=\"reset\" class=\"layui-btn layui-btn-primary\">重置</button>\n" +
+        "    </div>\n" +
+        "  </div>" +
+        "";
+
+    //弹出一个页面层
+    $('#add').on('click', function(){
+        layer.open({
+            type: 1,
+            area: ['600px', '360px'],
+            shadeClose: true, //点击遮罩关闭
+            content: html
+        });
+    });
+
+    layui.use('table', function(){
+        var table = layui.table;
+        var util = layui.util;
+        var table = layui.table;
+
+        //监听单元格编辑
+        table.on('edit(test3)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+
+            update(data.uuid,field,value);
+        });
+
+
+        //监听工具条
+        table.on('tool(test3)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+
+                $.ajax({
+                    type:"POST",
+                    url: "/moXbbUserPo/appointPhone",
+                    dataType: "json", //表示返回值类型，不必须
+                    data: { 'uuid': data.uuid},
+                    success: function (jsonResult) {
+                        layer.msg(jsonResult.data);
+                    },
+                    error: function (data){
+                        layer.msg("请求失败");
+                    }
+                });
+
+            } else if(obj.event === 'del'){
+                $.ajax({
+                    type:"POST",
+                    url: "/moXbbUserPo/queryByuuid",
+                    dataType: "json",
+                    data: { 'uuid': data.uuid},
+                    success: function (jsonResult) {
+                        var html = Funsjhtml(JSON.parse(jsonResult.data.info));
+                        layer.alert(html)
+                    },
+                    error: function (data){
+                        layer.msg("请求失败");
+                    }
+                });
+            } else if(obj.event === 'edit'){
+
+                $.ajax({
+                    type:"POST",
+                    url: "/moXbbUserPo/getCode",
+                    dataType: "json",
+                    data: { 'uuid': data.uuid},
+                    success: function (jsonResult) {
+                        layer.alert(jsonResult.data)
+                    },
+                    error: function (data){
+                        layer.msg("请求失败");
+                    }
+                });
+
+
+            }
+        });
+
+        table.render({
+            elem: '#test'
+            ,url:'/moXbbUserPo/myAccount'
+            ,toolbar: true
+            ,title: '用户数据表',
+            method:'POST',
+            dataType:'json',
+            contentType: 'application/json',
+            limit:10
+            ,cols: [[
+                {field:'id', title:'ID' , width:100,  fixed: 'left', sort: true}
+                ,{field:'userId', title:'用户名', edit: 'text'}
+                ,{field:'phone', title: '手机号', sort: true}
+                ,{field:'cdkey', title:'CDKEY', sort: true, totalRow: true,hide :true}
+                ,{field:'remarks', title:'备注', sort: true,edit: 'text'}
+                ,{field:'czTime', title:'充值日期', sort: true}
+                ,{field:'createTime', title:'创建时间', sort: true}
+                ,{field:'statusCd', title:'状态', sort: false,width:100,edit: 'text'}
+                ,{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}
+            ]]
+            ,done: function () {
+                $("[data-field='uuid']").css('display','none');
+            }
+            ,page: true
+            ,response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                };
+            }
+            ,id: 'testReload'
+        });
+
+        var $ = layui.$, active = {
+            reload: function(){
+                var key = $('#key');
+                var statusCd = $('#statusCd');
+
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    where:{"ownerId":key.val(),"statusCd":statusCd.val()}
+                }, 'data');
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+
+    function update(id,field,value) {
+        if(field != "statusCd" && field != "remarks"){
+            layer.msg('[暂时仅支持修改状态和备注]');
+            return;
+        }
+        if(field == "statusCd"){
+            if(value !='0' && value !='1' && value !='2' && value !='3' && value !='-1'){
+                layer.msg('[状态值不合法] ');
+                return;
+            }
+        }
+        $.ajax({
+            type:"POST",
+            url: "/moXbbUserPo/update",
+            contentType: "application/json", //如果提交的是json数据类型，则必须有此参数,表示提交的数据类型
+            dataType: "json", //表示返回值类型，不必须
+            data: JSON.stringify({ 'uuid': id, 'field1': field, 'field2': value }),
+            success: function (jsonResult) {
+                layer.msg(jsonResult.message);
+            },
+            error: function (data){
+                layer.msg("请求失败");
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

@@ -18,7 +18,16 @@
     </resultMap>
 
     <select id="queryLocationByUuid" resultType="map" parameterType="int">
-        select u.user_name,u.city,gps.* from mo_gps gps inner join mo_user u on u.user_id=gps.user_id limit #{i},100
+        select u.user_name,u.city,gps.* from mo_gps gps inner join mo_user u on u.user_id=gps.user_id limit #{i},1000
+    </select>
+
+    <select id="explain" resultType="map">
+        explain
+         select u.user_name,u.city,gps.* from mo_gps gps inner join mo_user u on u.user_id=gps.user_id
+    </select>
+
+    <select id="timeOut" resultType="map" timeout="10">
+        select count(1) rows from mo_gps
     </select>
 
 </mapper>

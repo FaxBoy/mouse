@@ -3,9 +3,11 @@
 
 ###################  swagger配置  ###################
 wavenet:
-  swagger-open: true #是否开启swagger (true/false)
+  swagger-open: false #是否开启swagger (true/false)
 
 ###################  spring配置  ###################
 spring:
   profiles:
-    active: dev
+    active: prod
+  thymeleaf:
+    prefix: classpath:/templates/

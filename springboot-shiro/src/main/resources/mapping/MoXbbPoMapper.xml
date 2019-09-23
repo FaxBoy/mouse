@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mouse.springbootshiro.mapper.MoXbbMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mouse.springbootshiro.dao.MoXbbPo">
+        <id column="id" property="id" />
+        <result column="phone" property="phone" />
+        <result column="success" property="success" />
+        <result column="info" property="info" />
+        <result column="owner" property="owner" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="remarks" property="remarks" />
+    </resultMap>
+
+    <select id="xbbQuery" parameterType="com.mouse.springbootshiro.pojo.XbbQuery" resultMap="BaseResultMap">
+        select * from mo_xbb x
+        WHERE 1 = 1
+        <if test="phone != null and phone != ''">
+            AND x.phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="owner != null and owner != ''">
+            AND x.owner = #{owner,jdbcType=VARCHAR}
+        </if>
+        <if test="success != null and success != ''">
+            AND x.success = #{success,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != ''">
+            AND x.status = #{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND x.create_time >= #{beginDate,jdbcType=VARCHAR}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND x.create_time &lt;= #{endDate,jdbcType=VARCHAR}
+        </if>
+        order by id
+    </select>
+
+    <select id="successList" parameterType="com.mouse.springbootshiro.pojo.XbbQuery" resultMap="BaseResultMap">
+        select id,phone from mo_xbb x
+        WHERE 1 = 1
+        <if test="phone != null and phone != ''">
+            AND x.phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="owner != null and owner != ''">
+            AND x.owner = #{owner,jdbcType=VARCHAR}
+        </if>
+        <if test="success != null and success != ''">
+            AND x.success = #{success,jdbcType=VARCHAR}
+        </if>
+        <if test="status != null and status != ''">
+            AND x.status = #{status}
+        </if>
+        <if test="beginDate != null and beginDate != ''">
+            AND x.create_time >= #{beginDate,jdbcType=VARCHAR}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND x.create_time &lt;= #{endDate,jdbcType=VARCHAR}
+        </if>
+        order by id
+    </select>
+
+</mapper>

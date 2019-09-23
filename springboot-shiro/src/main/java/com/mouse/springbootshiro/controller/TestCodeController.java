@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +39,7 @@ import java.util.Random;
  * @since 2019-07-01
  */
 @RequestMapping("/testCode")
-@Api(value = "onlyInterface", description = "OnlyAPI", produces = "application/json;charset=UTF-8")
+@Api(value = "onlyInterface", description = "OnlyAPI", produces = "application/json;charset=UTF-8",hidden=true)
 @RestController
 public class TestCodeController {
 
@@ -78,55 +79,15 @@ public class TestCodeController {
 
     @RequestMapping(value = "/create", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
     public ResultVO create(){
-//        Location location = new Location();
-//        location.setFoo("哈哈");
-//        location.setBar("书法的飞机撒了绝路逢生");
-//        location.setLocation(new GeoPoint(123, 31));
-//        esService.addLocation(location);
-
-//        Random random = new Random();
-//        for(int i = 0 ; i < 1200; i++){
-//            Order order = new Order();
-//            int j = random.nextInt(20) % 20 + 1;
-//            order.setId(i);
-//            order.setStoreId(j);
-//            order.setStoreName("旗舰店"+ j);
-//            order.setCategoryId(j);
-//            order.setCategoryCode("shirt_"+j);
-//            order.setProductCode("product_"+i);
-//            order.setQuantity(random.nextInt(20) % 20 + 1);
-//            order.setAmount(200 + (random.nextInt(20) % 20 + 1));
-//            order.setPayDate(new Date());
-//            String jsonStr = JSON.toJSONString(order, SerializerFeature.WriteDateUseDateFormat);
-//            bulkProcessorService.insertById("search_index",i+"",jsonStr);
-//        }
-
-
-//        Random random = new Random();
-//        for(int i = 0 ; i < 1200; i++){
-//            Order order = new Order();
-//            int j = random.nextInt(20) % 20 + 1;
-//            order.setId(i);
-//            order.setStoreId(j);
-//            order.setStoreName("旗舰店"+ j);
-//            order.setCategoryId(j);
-//            order.setCategoryCode("shirt_"+j);
-//            order.setProductCode("product_"+i);
-//            order.setQuantity(random.nextInt(20) % 20 + 1);
-//            order.setAmount(200 + (random.nextInt(20) % 20 + 1));
-//            order.setPayDate(new Date());
-//            String jsonStr = JSON.toJSONString(order, SerializerFeature.WriteDateUseDateFormat);
-//            bulkProcessorService.insertById("search_index",i+"",jsonStr);
-//        }
 
             String uuid= "000002604e6b4ca5bd56946fcb7bc170";
 
-            for(int i =100 ;i<=7830;i++){
+            for(int i =0 ;i<=7830;i++){
                 List<Map<String,Object>> list = moGpsMapper.queryLocationByUuid(i);
 
                 for(Map<String,Object> map:list){
                     Location location = new Location();
-                    location.setUuid(uuid);
+                    location.setUuid(map.get("city").toString());
                     location.setAddress(map.get("city").toString());
                     SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     try {
@@ -158,8 +119,5 @@ public class TestCodeController {
     public ResultVO search(@RequestParam @ApiParam(name="storeName",value="商品名称",required=true)String storeName){
         return new ResultVO(200,"success",esService.search(storeName));
     }
-
-
-
 }
 

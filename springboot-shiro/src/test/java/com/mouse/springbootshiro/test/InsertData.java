@@ -27,7 +27,12 @@ public class InsertData {
 //            new MyThread().start();
 //        }
 
-        System.out.println(isInteger("12.1312231"));
+        BigDecimal a = new BigDecimal(321);
+        BigDecimal b = new BigDecimal(100);
+
+        System.out.println(a.subtract(b)==BigDecimal.ZERO);
+
+        System.out.println(a.compareTo(b));
 
     }
 

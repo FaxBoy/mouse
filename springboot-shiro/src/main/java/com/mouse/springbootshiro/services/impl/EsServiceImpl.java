@@ -105,11 +105,16 @@ public class EsServiceImpl implements EsService {
         indexRequest.source(jsonStr, XContentType.JSON);
 //        indexRequest.id(id);
         try {
-            System.out.println(highLevelClient.index(indexRequest,RequestOptions.DEFAULT));
+            highLevelClient.index(indexRequest,RequestOptions.DEFAULT);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
+//        try {
+//            System.out.println(highLevelClient.index(indexRequest,RequestOptions.DEFAULT));
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
 }
